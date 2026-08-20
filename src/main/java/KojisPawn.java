@@ -2,12 +2,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Handles greeting and bye input
- * Now handles add tasks and displaying list
+ * Runs the chatbot and handles adding, listing, and marking tasks.
  */
-
 public class KojisPawn {
     private static ArrayList<String> toDoList = new ArrayList<>();
+    private static ArrayList<Boolean> taskStatuses = new ArrayList<>();
     private static final String LINE = "-----------------\n";
 
     public static void main(String[] args) {
@@ -25,10 +24,15 @@ public class KojisPawn {
                 System.out.print(LINE);
 
                 for (int i = 0; i < toDoList.size(); i++) {
-                    System.out.println((i + 1) + ". " + toDoList.get(i));
+                    String statusIcon = taskStatuses.get(i) ? "X" : " ";
+                    System.out.println((i + 1) + ".[" + statusIcon + "] " + toDoList.get(i));
                 }
 
                 System.out.print(LINE);
+            } else if (command.startsWith("mark ")) {
+                int taskNumber = Integer.parseInt(command.substring(5));
+                int taskIndex = taskNumber - 1;
+                markTask(taskIndex);
             } else {
                 addTask(command);
                 System.out.print(LINE);
@@ -73,5 +77,14 @@ public class KojisPawn {
 
     private static void addTask(String string) {
         toDoList.add(string);
+        taskStatuses.add(false);
+    }
+
+    private static void markTask(int index) {
+        taskStatuses.set(index, true);
+        System.out.print(LINE);
+        System.out.println("Another variable falls into place. This task is now complete:");
+        System.out.println("  [X] " + toDoList.get(index));
+        System.out.print(LINE);
     }
 }
