@@ -1,11 +1,13 @@
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
  * Handles greeting and bye input
+ * Now handles add tasks and displaying list
  */
 
 public class KojisPawn {
-
+    private static ArrayList<String> toDoList = new ArrayList<>();
     private static final String LINE = "-----------------\n";
 
     public static void main(String[] args) {
@@ -19,17 +21,27 @@ public class KojisPawn {
             if (command.equals("bye")) {
                 break;
             }
+            if (command.equals("list")) {
+                System.out.print(LINE);
 
-            System.out.print(LINE);
-            System.out.println(command);
-            System.out.print(LINE);
+                for (int i = 0; i < toDoList.size(); i++) {
+                    System.out.println((i + 1) + ". " + toDoList.get(i));
+                }
+
+                System.out.print(LINE);
+            } else {
+                addTask(command);
+                System.out.print(LINE);
+                System.out.println("added: " + command);
+                System.out.print(LINE);
+            }
         }
 
         exitMessage();
         scanner.close();
     }
 
-    public static void greetingMessage() {
+    private static void greetingMessage() {
         String banner =
                 "+---------------+\n"
                         + "|  Koji's Pawn  |\n"
@@ -52,10 +64,14 @@ public class KojisPawn {
         System.out.print(greet);
     }
 
-    public static void exitMessage() {
+    private static void exitMessage() {
         String exit = LINE
                 + "Leaving already? How predictable. Your return was already part of the plan.\n"
                 + LINE;
         System.out.print(exit);
+    }
+
+    private static void addTask(String string) {
+        toDoList.add(string);
     }
 }
