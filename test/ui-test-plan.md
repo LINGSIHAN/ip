@@ -335,3 +335,96 @@ Now you have 1 task in the list.
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Invalid mark and unmark recovery
+
+Aim: Verify task numbers are present, numeric, positive, and within the list before task status changes.
+
+### Commands
+
+```text
+mark
+mark one
+mark 0
+mark -1
+mark 1
+todo manipulate outcome
+mark 1 2
+mark 2
+mark 1
+unmark
+unmark one
+unmark 2
+unmark 1
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Specify which task to mark. Use: mark TASK_NUMBER.
+-----------------
+-----------------
+Task positions are numbers, not guesses. Use: mark TASK_NUMBER.
+-----------------
+-----------------
+The list begins at 1. Choose a positive task number.
+-----------------
+-----------------
+The list begins at 1. Choose a positive task number.
+-----------------
+-----------------
+There are no tasks to mark yet.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] manipulate outcome
+Now you have 1 task in the list.
+-----------------
+-----------------
+Task positions are numbers, not guesses. Use: mark TASK_NUMBER.
+-----------------
+-----------------
+No task occupies that position. Choose a number from 1 to 1.
+-----------------
+-----------------
+Another variable falls into place. This task is now complete:
+  [T][X] manipulate outcome
+-----------------
+-----------------
+Specify which task to unmark. Use: unmark TASK_NUMBER.
+-----------------
+-----------------
+Task positions are numbers, not guesses. Use: unmark TASK_NUMBER.
+-----------------
+-----------------
+No task occupies that position. Choose a number from 1 to 1.
+-----------------
+-----------------
+Even regression has its purpose. This task is incomplete once more:
+  [T][ ] manipulate outcome
+-----------------
+-----------------
+1.[T][ ] manipulate outcome
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```

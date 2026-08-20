@@ -28,13 +28,11 @@ public class KojisPawn {
                     }
 
                     System.out.print(LINE);
-                } else if (command.startsWith("mark ")) {
-                    int taskNumber = Integer.parseInt(command.substring(5));
-                    int taskIndex = taskNumber - 1;
+                } else if (command.equals("mark") || command.startsWith("mark ")) {
+                    int taskIndex = getTaskIndex(command, "mark");
                     markTask(taskIndex);
-                } else if (command.startsWith("unmark ")) {
-                    int taskNumber = Integer.parseInt(command.substring(7));
-                    int taskIndex = taskNumber - 1;
+                } else if (command.equals("unmark") || command.startsWith("unmark ")) {
+                    int taskIndex = getTaskIndex(command, "unmark");
                     unmarkTask(taskIndex);
                 } else if (command.equals("todo") || command.startsWith("todo ")) {
                     String description = command.equals("todo") ? "" : command.substring(5);
@@ -219,6 +217,45 @@ public class KojisPawn {
         }
 
         addTask(new Event(description, from.substring(1), to.substring(1)));
+    }
+
+    /**
+     * Extracts and validates the one-based task number in a mark or unmark command.
+     *
+     * @param command complete command entered by the user
+     * @param action command word, either {@code mark} or {@code unmark}
+     * @return validated zero-based task index
+     * @throws KojisPawnException if the task number is missing, malformed, or outside the list
+     */
+    private static int getTaskIndex(String command, String action) throws KojisPawnException {
+        String taskNumberText = command.equals(action)
+                ? ""
+                : command.substring(action.length() + 1);
+        if (taskNumberText.isBlank()) {
+            throw new KojisPawnException(
+                    "Specify which task to " + action + ". Use: " + action + " TASK_NUMBER.");
+        }
+
+        int taskNumber;
+        try {
+            taskNumber = Integer.parseInt(taskNumberText);
+        } catch (NumberFormatException exception) {
+            throw new KojisPawnException(
+                    "Task positions are numbers, not guesses. Use: " + action + " TASK_NUMBER.");
+        }
+
+        if (taskNumber <= 0) {
+            throw new KojisPawnException("The list begins at 1. Choose a positive task number.");
+        }
+        if (toDoList.isEmpty()) {
+            throw new KojisPawnException("There are no tasks to " + action + " yet.");
+        }
+        if (taskNumber > toDoList.size()) {
+            throw new KojisPawnException(
+                    "No task occupies that position. Choose a number from 1 to " + toDoList.size() + ".");
+        }
+
+        return taskNumber - 1;
     }
 
     /**
