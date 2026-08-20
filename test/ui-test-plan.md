@@ -112,3 +112,49 @@ Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
 
+## Unknown command recovery
+
+Aim: Verify an unknown command produces a helpful error and does not prevent the next valid command from running.
+
+### Commands
+
+```text
+blah
+todo remain unnoticed
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, or bye.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] remain unnoticed
+Now you have 1 task in the list.
+-----------------
+-----------------
+1.[T][ ] remain unnoticed
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```

@@ -19,39 +19,46 @@ public class KojisPawn {
             if (command.equals("bye")) {
                 break;
             }
-            if (command.equals("list")) {
-                System.out.print(LINE);
+            try {
+                if (command.equals("list")) {
+                    System.out.print(LINE);
 
-                for (int i = 0; i < toDoList.size(); i++) {
-                    System.out.println((i + 1) + "." + toDoList.get(i));
+                    for (int i = 0; i < toDoList.size(); i++) {
+                        System.out.println((i + 1) + "." + toDoList.get(i));
+                    }
+
+                    System.out.print(LINE);
+                } else if (command.startsWith("mark ")) {
+                    int taskNumber = Integer.parseInt(command.substring(5));
+                    int taskIndex = taskNumber - 1;
+                    markTask(taskIndex);
+                } else if (command.startsWith("unmark ")) {
+                    int taskNumber = Integer.parseInt(command.substring(7));
+                    int taskIndex = taskNumber - 1;
+                    unmarkTask(taskIndex);
+                } else if (command.startsWith("todo ")) {
+                    String description = command.substring(5);
+                    addTask(new Todo(description));
+                } else if (command.startsWith("deadline ")) {
+                    String deadlineDetails = command.substring(9);
+                    int byIndex = deadlineDetails.indexOf(" /by ");
+                    String description = deadlineDetails.substring(0, byIndex);
+                    String by = deadlineDetails.substring(byIndex + 5);
+                    addTask(new Deadline(description, by));
+                } else if (command.startsWith("event ")) {
+                    String eventDetails = command.substring(6);
+                    int fromIndex = eventDetails.indexOf(" /from ");
+                    int toIndex = eventDetails.indexOf(" /to ", fromIndex + 7);
+                    String description = eventDetails.substring(0, fromIndex);
+                    String from = eventDetails.substring(fromIndex + 7, toIndex);
+                    String to = eventDetails.substring(toIndex + 5);
+                    addTask(new Event(description, from, to));
+                } else {
+                    throw new KojisPawnException(
+                            "That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, or bye.");
                 }
-
-                System.out.print(LINE);
-            } else if (command.startsWith("mark ")) {
-                int taskNumber = Integer.parseInt(command.substring(5));
-                int taskIndex = taskNumber - 1;
-                markTask(taskIndex);
-            } else if (command.startsWith("unmark ")) {
-                int taskNumber = Integer.parseInt(command.substring(7));
-                int taskIndex = taskNumber - 1;
-                unmarkTask(taskIndex);
-            } else if (command.startsWith("todo ")) {
-                String description = command.substring(5);
-                addTask(new Todo(description));
-            } else if (command.startsWith("deadline ")) {
-                String deadlineDetails = command.substring(9);
-                int byIndex = deadlineDetails.indexOf(" /by ");
-                String description = deadlineDetails.substring(0, byIndex);
-                String by = deadlineDetails.substring(byIndex + 5);
-                addTask(new Deadline(description, by));
-            } else if (command.startsWith("event ")) {
-                String eventDetails = command.substring(6);
-                int fromIndex = eventDetails.indexOf(" /from ");
-                int toIndex = eventDetails.indexOf(" /to ", fromIndex + 7);
-                String description = eventDetails.substring(0, fromIndex);
-                String from = eventDetails.substring(fromIndex + 7, toIndex);
-                String to = eventDetails.substring(toIndex + 5);
-                addTask(new Event(description, from, to));
+            } catch (KojisPawnException exception) {
+                showError(exception.getMessage());
             }
         }
 
@@ -87,6 +94,17 @@ public class KojisPawn {
                 + "Leaving already? How predictable. Your return was already part of the plan.\n"
                 + LINE;
         System.out.print(exit);
+    }
+
+    /**
+     * Displays a command error without ending the chatbot session.
+     *
+     * @param message explanation of the invalid command
+     */
+    private static void showError(String message) {
+        System.out.print(LINE);
+        System.out.println(message);
+        System.out.print(LINE);
     }
 
     /**
