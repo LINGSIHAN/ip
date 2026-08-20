@@ -35,11 +35,11 @@ public class KojisPawn {
                 int taskNumber = Integer.parseInt(command.substring(7));
                 int taskIndex = taskNumber - 1;
                 unmarkTask(taskIndex);
+            } else if (command.startsWith("todo ")) {
+                String description = command.substring(5);
+                addTask(new Todo(description));
             } else {
-                addTask(command);
-                System.out.print(LINE);
-                System.out.println("added: " + command);
-                System.out.print(LINE);
+                addTask(new Task(command));
             }
         }
 
@@ -80,10 +80,17 @@ public class KojisPawn {
     /**
      * Adds a new incomplete task to the task list.
      *
-     * @param description description of the task to add
+     * @param task task to add
      */
-    private static void addTask(String description) {
-        toDoList.add(new Task(description));
+    private static void addTask(Task task) {
+        toDoList.add(task);
+        System.out.print(LINE);
+        System.out.println("Got it. I've added this task:");
+        System.out.println("  " + task);
+        int taskCount = toDoList.size();
+        String taskWord = taskCount == 1 ? "task" : "tasks";
+        System.out.println("Now you have " + taskCount + " " + taskWord + " in the list.");
+        System.out.print(LINE);
     }
 
     /**
