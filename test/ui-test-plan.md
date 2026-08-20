@@ -428,3 +428,65 @@ Even regression has its purpose. This task is incomplete once more:
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Whitespace normalization
+
+Aim: Verify leading and repeated structural spaces do not change stored task text or command behavior.
+
+### Commands
+
+```text
+   todo    watch the room
+   deadline    submit report   /by    Friday
+   event    observe class   /from    Mon 2pm   /to    4pm
+   mark    1
+   list
+   bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] watch the room
+Now you have 1 task in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [D][ ] submit report (by: Friday)
+Now you have 2 tasks in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [E][ ] observe class (from: Mon 2pm to: 4pm)
+Now you have 3 tasks in the list.
+-----------------
+-----------------
+Another variable falls into place. This task is now complete:
+  [T][X] watch the room
+-----------------
+-----------------
+1.[T][X] watch the room
+2.[D][ ] submit report (by: Friday)
+3.[E][ ] observe class (from: Mon 2pm to: 4pm)
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```

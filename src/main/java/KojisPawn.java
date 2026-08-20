@@ -14,7 +14,7 @@ public class KojisPawn {
         greetingMessage();
 
         while (true) {
-            String command = scanner.nextLine();
+            String command = scanner.nextLine().strip();
 
             if (command.equals("bye")) {
                 break;
@@ -28,22 +28,22 @@ public class KojisPawn {
                     }
 
                     System.out.print(LINE);
-                } else if (command.equals("mark") || command.startsWith("mark ")) {
+                } else if (hasCommandWord(command, "mark")) {
                     int taskIndex = getTaskIndex(command, "mark");
                     markTask(taskIndex);
-                } else if (command.equals("unmark") || command.startsWith("unmark ")) {
+                } else if (hasCommandWord(command, "unmark")) {
                     int taskIndex = getTaskIndex(command, "unmark");
                     unmarkTask(taskIndex);
-                } else if (command.equals("todo") || command.startsWith("todo ")) {
-                    String description = command.equals("todo") ? "" : command.substring(5);
+                } else if (hasCommandWord(command, "todo")) {
+                    String description = command.substring("todo".length()).strip();
                     if (description.isBlank()) {
                         throw new KojisPawnException(
                                 "An empty task has no place in the plan. Describe what must be done after todo.");
                     }
                     addTask(new Todo(description));
-                } else if (command.equals("deadline") || command.startsWith("deadline ")) {
+                } else if (hasCommandWord(command, "deadline")) {
                     addDeadline(command);
-                } else if (command.equals("event") || command.startsWith("event ")) {
+                } else if (hasCommandWord(command, "event")) {
                     addEvent(command);
                 } else {
                     throw new KojisPawnException(
@@ -100,6 +100,20 @@ public class KojisPawn {
     }
 
     /**
+     * Checks whether input consists of the given command word followed by optional arguments.
+     *
+     * @param command normalized user input
+     * @param commandWord command word to find
+     * @return true if the input starts with the complete command word
+     */
+    private static boolean hasCommandWord(String command, String commandWord) {
+        return command.equals(commandWord)
+                || (command.startsWith(commandWord)
+                && command.length() > commandWord.length()
+                && Character.isWhitespace(command.charAt(commandWord.length())));
+    }
+
+    /**
      * Adds a new incomplete task to the task list.
      *
      * @param task task to add
@@ -122,7 +136,7 @@ public class KojisPawn {
      * @throws KojisPawnException if the description, {@code /by} marker, or deadline value is missing
      */
     private static void addDeadline(String command) throws KojisPawnException {
-        String deadlineDetails = command.equals("deadline") ? "" : command.substring(9);
+        String deadlineDetails = command.substring("deadline".length()).strip();
         if (deadlineDetails.isBlank()) {
             throw new KojisPawnException(
                     "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
@@ -139,7 +153,7 @@ public class KojisPawn {
                     "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
         }
 
-        String description = deadlineDetails.substring(0, byIndex);
+        String description = deadlineDetails.substring(0, byIndex).strip();
         if (description.isBlank()) {
             throw new KojisPawnException(
                     "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
@@ -150,12 +164,12 @@ public class KojisPawn {
         if (by.isBlank()) {
             throw new KojisPawnException("The plan requires a deadline value after /by.");
         }
-        if (!by.startsWith(" ")) {
+        if (!Character.isWhitespace(by.charAt(0))) {
             throw new KojisPawnException(
                     "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
         }
 
-        addTask(new Deadline(description, by.substring(1)));
+        addTask(new Deadline(description, by.strip()));
     }
 
     /**
@@ -165,7 +179,7 @@ public class KojisPawn {
      * @throws KojisPawnException if any event detail is missing or its markers are out of order
      */
     private static void addEvent(String command) throws KojisPawnException {
-        String eventDetails = command.equals("event") ? "" : command.substring(6);
+        String eventDetails = command.substring("event".length()).strip();
         if (eventDetails.isBlank()
                 || eventDetails.startsWith("/from")
                 || eventDetails.startsWith("/to")) {
@@ -189,7 +203,7 @@ public class KojisPawn {
                     "Causality matters. Place /from START before /to END.");
         }
 
-        String description = eventDetails.substring(0, fromIndex);
+        String description = eventDetails.substring(0, fromIndex).strip();
         if (description.isBlank()) {
             throw new KojisPawnException(
                     "An event without a description cannot enter the plan. "
@@ -201,7 +215,7 @@ public class KojisPawn {
         if (from.isBlank()) {
             throw new KojisPawnException("The plan requires a starting value after /from.");
         }
-        if (!from.startsWith(" ")) {
+        if (!Character.isWhitespace(from.charAt(0))) {
             throw new KojisPawnException(
                     "Every event has an origin. Include /from START.");
         }
@@ -211,12 +225,12 @@ public class KojisPawn {
         if (to.isBlank()) {
             throw new KojisPawnException("The plan requires an ending value after /to.");
         }
-        if (!to.startsWith(" ")) {
+        if (!Character.isWhitespace(to.charAt(0))) {
             throw new KojisPawnException(
                     "Even calculated events need an endpoint. Include /to END.");
         }
 
-        addTask(new Event(description, from.substring(1), to.substring(1)));
+        addTask(new Event(description, from.strip(), to.strip()));
     }
 
     /**
@@ -228,9 +242,7 @@ public class KojisPawn {
      * @throws KojisPawnException if the task number is missing, malformed, or outside the list
      */
     private static int getTaskIndex(String command, String action) throws KojisPawnException {
-        String taskNumberText = command.equals(action)
-                ? ""
-                : command.substring(action.length() + 1);
+        String taskNumberText = command.substring(action.length()).strip();
         if (taskNumberText.isBlank()) {
             throw new KojisPawnException(
                     "Specify which task to " + action + ". Use: " + action + " TASK_NUMBER.");
