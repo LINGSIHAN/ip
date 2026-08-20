@@ -33,6 +33,10 @@ public class KojisPawn {
                 int taskNumber = Integer.parseInt(command.substring(5));
                 int taskIndex = taskNumber - 1;
                 markTask(taskIndex);
+            } else if (command.startsWith("unmark ")) {
+                int taskNumber = Integer.parseInt(command.substring(7));
+                int taskIndex = taskNumber - 1;
+                unmarkTask(taskIndex);
             } else {
                 addTask(command);
                 System.out.print(LINE);
@@ -85,6 +89,14 @@ public class KojisPawn {
         System.out.print(LINE);
         System.out.println("Another variable falls into place. This task is now complete:");
         System.out.println("  [X] " + toDoList.get(index));
+        System.out.print(LINE);
+    }
+
+    private static void unmarkTask(int index) {
+        taskStatuses.set(index, false);
+        System.out.print(LINE);
+        System.out.println("Even regression has its purpose. This task is incomplete once more:");
+        System.out.println("  [ ] " + toDoList.get(index));
         System.out.print(LINE);
     }
 }
