@@ -79,11 +79,21 @@ public class KojisPawn {
         System.out.print(exit);
     }
 
+    /**
+     * Adds a new incomplete task to the task list.
+     *
+     * @param string description of the task to add
+     */
     private static void addTask(String string) {
         toDoList.add(string);
         taskStatuses.add(false);
     }
 
+    /**
+     * Marks the selected task as complete and displays a confirmation.
+     *
+     * @param index zero-based index of the task to mark
+     */
     private static void markTask(int index) {
         taskStatuses.set(index, true);
         System.out.print(LINE);
@@ -92,6 +102,11 @@ public class KojisPawn {
         System.out.print(LINE);
     }
 
+    /**
+     * Marks the selected task as incomplete and displays a confirmation.
+     *
+     * @param index zero-based index of the task to unmark
+     */
     private static void unmarkTask(int index) {
         taskStatuses.set(index, false);
         System.out.print(LINE);
