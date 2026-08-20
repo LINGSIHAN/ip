@@ -264,3 +264,74 @@ Now you have 1 task in the list.
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Invalid event recovery
+
+Aim: Verify every event field and marker is required and /from must appear before /to.
+
+### Commands
+
+```text
+event
+event /from Mon 2pm /to 4pm
+event project meeting /to 4pm
+event project meeting /from Mon 2pm
+event project meeting /from /to 4pm
+event project meeting /from Mon 2pm /to
+event project meeting /to 4pm /from Mon 2pm
+event project meeting /from Mon 2pm /to 4pm
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+An event without a description cannot enter the plan. Use: event DESCRIPTION /from START /to END.
+-----------------
+-----------------
+An event without a description cannot enter the plan. Use: event DESCRIPTION /from START /to END.
+-----------------
+-----------------
+Every event has an origin. Include /from START.
+-----------------
+-----------------
+Even calculated events need an endpoint. Include /to END.
+-----------------
+-----------------
+The plan requires a starting value after /from.
+-----------------
+-----------------
+The plan requires an ending value after /to.
+-----------------
+-----------------
+Causality matters. Place /from START before /to END.
+-----------------
+-----------------
+Got it. I've added this task:
+  [E][ ] project meeting (from: Mon 2pm to: 4pm)
+Now you have 1 task in the list.
+-----------------
+-----------------
+1.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```

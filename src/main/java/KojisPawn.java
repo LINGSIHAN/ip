@@ -45,14 +45,8 @@ public class KojisPawn {
                     addTask(new Todo(description));
                 } else if (command.equals("deadline") || command.startsWith("deadline ")) {
                     addDeadline(command);
-                } else if (command.startsWith("event ")) {
-                    String eventDetails = command.substring(6);
-                    int fromIndex = eventDetails.indexOf(" /from ");
-                    int toIndex = eventDetails.indexOf(" /to ", fromIndex + 7);
-                    String description = eventDetails.substring(0, fromIndex);
-                    String from = eventDetails.substring(fromIndex + 7, toIndex);
-                    String to = eventDetails.substring(toIndex + 5);
-                    addTask(new Event(description, from, to));
+                } else if (command.equals("event") || command.startsWith("event ")) {
+                    addEvent(command);
                 } else {
                     throw new KojisPawnException(
                             "That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, or bye.");
@@ -164,6 +158,67 @@ public class KojisPawn {
         }
 
         addTask(new Deadline(description, by.substring(1)));
+    }
+
+    /**
+     * Validates and adds an event command.
+     *
+     * @param command complete event command entered by the user
+     * @throws KojisPawnException if any event detail is missing or its markers are out of order
+     */
+    private static void addEvent(String command) throws KojisPawnException {
+        String eventDetails = command.equals("event") ? "" : command.substring(6);
+        if (eventDetails.isBlank()
+                || eventDetails.startsWith("/from")
+                || eventDetails.startsWith("/to")) {
+            throw new KojisPawnException(
+                    "An event without a description cannot enter the plan. "
+                            + "Use: event DESCRIPTION /from START /to END.");
+        }
+
+        String fromMarker = " /from";
+        String toMarker = " /to";
+        int fromIndex = eventDetails.indexOf(fromMarker);
+        int toIndex = eventDetails.indexOf(toMarker);
+        if (fromIndex == -1) {
+            throw new KojisPawnException("Every event has an origin. Include /from START.");
+        }
+        if (toIndex == -1) {
+            throw new KojisPawnException("Even calculated events need an endpoint. Include /to END.");
+        }
+        if (toIndex < fromIndex) {
+            throw new KojisPawnException(
+                    "Causality matters. Place /from START before /to END.");
+        }
+
+        String description = eventDetails.substring(0, fromIndex);
+        if (description.isBlank()) {
+            throw new KojisPawnException(
+                    "An event without a description cannot enter the plan. "
+                            + "Use: event DESCRIPTION /from START /to END.");
+        }
+
+        int fromStartIndex = fromIndex + fromMarker.length();
+        String from = eventDetails.substring(fromStartIndex, toIndex);
+        if (from.isBlank()) {
+            throw new KojisPawnException("The plan requires a starting value after /from.");
+        }
+        if (!from.startsWith(" ")) {
+            throw new KojisPawnException(
+                    "Every event has an origin. Include /from START.");
+        }
+
+        int toStartIndex = toIndex + toMarker.length();
+        String to = eventDetails.substring(toStartIndex);
+        if (to.isBlank()) {
+            throw new KojisPawnException("The plan requires an ending value after /to.");
+        }
+        if (!to.startsWith(" ")) {
+            throw new KojisPawnException(
+                    "Even calculated events need an endpoint. Include /to END.");
+        }
+
+        addTask(new Event(description, from.substring(1), to.substring(1)));
     }
 
     /**
