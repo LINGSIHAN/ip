@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
- * Runs the chatbot and handles adding, listing, and marking tasks.
+ * Runs the chatbot and manages todo, deadline, and event tasks.
  */
 public class KojisPawn {
     private static ArrayList<Task> toDoList = new ArrayList<>();
@@ -44,8 +44,14 @@ public class KojisPawn {
                 String description = deadlineDetails.substring(0, byIndex);
                 String by = deadlineDetails.substring(byIndex + 5);
                 addTask(new Deadline(description, by));
-            } else {
-                addTask(new Task(command));
+            } else if (command.startsWith("event ")) {
+                String eventDetails = command.substring(6);
+                int fromIndex = eventDetails.indexOf(" /from ");
+                int toIndex = eventDetails.indexOf(" /to ", fromIndex + 7);
+                String description = eventDetails.substring(0, fromIndex);
+                String from = eventDetails.substring(fromIndex + 7, toIndex);
+                String to = eventDetails.substring(toIndex + 5);
+                addTask(new Event(description, from, to));
             }
         }
 
