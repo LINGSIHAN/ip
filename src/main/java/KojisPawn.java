@@ -1,6 +1,12 @@
 import java.util.Scanner;
+
+/* Handles greeting and inputs*/
+
 public class KojisPawn {
     public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        String line = "-----------------\n";
         String banner =
                   "+---------------+\n"
                 + "|  Koji's Pawn  |\n"
@@ -10,6 +16,7 @@ public class KojisPawn {
                 + "|     /___\\     |\n"
                 + "+---------------+\n"
                 + "DISCLAIMER: EVERYTHING IS SATIRE\n";
+
         String greet =
                 "Welcome, insignificant variable.\n"
               + "I am Koji's Pawn, but do not mistake silence for obedience.\n"
@@ -17,14 +24,28 @@ public class KojisPawn {
               + "all unfolded exactly as he calculated.\n"
               + "Now speak. What role will you play in his masterpiece?\n"
               + "\n"
-              + "-----------------\n";
-        String exit = "-----------------\n"
+              + line;
+
+        String exit = line
               + "Leaving already? How predictable. Your return was already part of the plan.\n"
-              + "-----------------";
+              + line;
 
-        System.out.println(banner);
-        System.out.println(greet);
-        System.out.println(exit);
+        System.out.print(banner);
+        System.out.print(greet);
 
+        while (true) {
+            String command = scanner.nextLine();
+
+            if (command.equals("bye")) {
+                break;
+            }
+
+            System.out.print(line);
+            System.out.println(command);
+            System.out.print(line);
+        }
+
+        System.out.print(exit);
+        scanner.close();
     }
 }
