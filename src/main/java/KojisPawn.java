@@ -34,6 +34,9 @@ public class KojisPawn {
                 } else if (hasCommandWord(command, "unmark")) {
                     int taskIndex = getTaskIndex(command, "unmark");
                     unmarkTask(taskIndex);
+                } else if (hasCommandWord(command, "delete")) {
+                    int taskIndex = getTaskIndex(command, "delete");
+                    deleteTask(taskIndex);
                 } else if (hasCommandWord(command, "todo")) {
                     String description = command.substring("todo".length()).strip();
                     if (description.isBlank()) {
@@ -47,7 +50,8 @@ public class KojisPawn {
                     addEvent(command);
                 } else {
                     throw new KojisPawnException(
-                            "That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, or bye.");
+                            "That command was never part of the plan. "
+                                    + "Try todo, deadline, event, list, mark, unmark, delete, or bye.");
                 }
             } catch (KojisPawnException exception) {
                 showError(exception.getMessage());
@@ -234,10 +238,10 @@ public class KojisPawn {
     }
 
     /**
-     * Extracts and validates the one-based task number in a mark or unmark command.
+     * Extracts and validates the one-based task number in a task-index command.
      *
      * @param command complete command entered by the user
-     * @param action command word, either {@code mark} or {@code unmark}
+     * @param action command word, such as {@code mark}, {@code unmark}, or {@code delete}
      * @return validated zero-based task index
      * @throws KojisPawnException if the task number is missing, malformed, or outside the list
      */
@@ -295,6 +299,22 @@ public class KojisPawn {
         System.out.print(LINE);
         System.out.println("Even regression has its purpose. This task is incomplete once more:");
         System.out.println("  " + task);
+        System.out.print(LINE);
+    }
+
+    /**
+     * Removes the selected task and reports the updated task count.
+     *
+     * @param index zero-based index of the task to delete
+     */
+    private static void deleteTask(int index) {
+        Task removedTask = toDoList.remove(index);
+        System.out.print(LINE);
+        System.out.println("A disposable piece has left the board. This task has been removed:");
+        System.out.println("  " + removedTask);
+        int taskCount = toDoList.size();
+        String taskWord = taskCount == 1 ? "task" : "tasks";
+        System.out.println("Now you have " + taskCount + " " + taskWord + " in the list.");
         System.out.print(LINE);
     }
 }

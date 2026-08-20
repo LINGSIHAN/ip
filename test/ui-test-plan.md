@@ -144,7 +144,7 @@ Now speak. What role will you play in his masterpiece?
 
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, or bye.
 -----------------
 -----------------
 Got it. I've added this task:
@@ -542,7 +542,7 @@ Even calculated events need an endpoint. Include /to END.
 No task occupies that position. Choose a number from 1 to 1.
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, or bye.
 -----------------
 -----------------
 Got it. I've added this task:
@@ -556,6 +556,99 @@ Another variable falls into place. This task is now complete:
 -----------------
 1.[T][X] original task
 2.[T][ ] surviving task
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
+
+## Delete tasks and handle invalid indices
+
+Aim: Verify delete removes and returns the selected task, shifts later indices, updates counts, and rejects invalid indices.
+
+### Commands
+
+```text
+delete
+delete 1
+todo first piece
+deadline second piece /by Friday
+event third piece /from Monday /to Tuesday
+delete one
+delete 0
+delete 4
+delete 2
+delete 2
+list
+delete 1
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Specify which task to delete. Use: delete TASK_NUMBER.
+-----------------
+-----------------
+There are no tasks to delete yet.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] first piece
+Now you have 1 task in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [D][ ] second piece (by: Friday)
+Now you have 2 tasks in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [E][ ] third piece (from: Monday to: Tuesday)
+Now you have 3 tasks in the list.
+-----------------
+-----------------
+Task positions are numbers, not guesses. Use: delete TASK_NUMBER.
+-----------------
+-----------------
+The list begins at 1. Choose a positive task number.
+-----------------
+-----------------
+No task occupies that position. Choose a number from 1 to 3.
+-----------------
+-----------------
+A disposable piece has left the board. This task has been removed:
+  [D][ ] second piece (by: Friday)
+Now you have 2 tasks in the list.
+-----------------
+-----------------
+A disposable piece has left the board. This task has been removed:
+  [E][ ] third piece (from: Monday to: Tuesday)
+Now you have 1 task in the list.
+-----------------
+-----------------
+1.[T][ ] first piece
+-----------------
+-----------------
+A disposable piece has left the board. This task has been removed:
+  [T][ ] first piece
+Now you have 0 tasks in the list.
 -----------------
 -----------------
 Leaving already? How predictable. Your return was already part of the plan.
