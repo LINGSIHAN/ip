@@ -490,3 +490,74 @@ Another variable falls into place. This task is now complete:
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Interleaved error recovery and state safety
+
+Aim: Verify consecutive invalid commands do not mutate existing tasks and valid commands still work afterward.
+
+### Commands
+
+```text
+todo original task
+deadline missing boundary
+event unfinished meeting /from Monday
+mark 2
+blah
+todo surviving task
+mark 1
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] original task
+Now you have 1 task in the list.
+-----------------
+-----------------
+Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.
+-----------------
+-----------------
+Even calculated events need an endpoint. Include /to END.
+-----------------
+-----------------
+No task occupies that position. Choose a number from 1 to 1.
+-----------------
+-----------------
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, or bye.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] surviving task
+Now you have 2 tasks in the list.
+-----------------
+-----------------
+Another variable falls into place. This task is now complete:
+  [T][X] original task
+-----------------
+-----------------
+1.[T][X] original task
+2.[T][ ] surviving task
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
