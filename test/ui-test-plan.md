@@ -158,3 +158,50 @@ Now you have 1 task in the list.
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Empty todo recovery
+
+Aim: Verify a todo without a description produces a specific error, does not add a task, and allows later commands.
+
+### Commands
+
+```text
+todo
+todo read between the lines
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+An empty task has no place in the plan. Describe what must be done after todo.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] read between the lines
+Now you have 1 task in the list.
+-----------------
+-----------------
+1.[T][ ] read between the lines
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```

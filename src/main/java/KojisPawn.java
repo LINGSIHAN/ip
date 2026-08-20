@@ -36,8 +36,12 @@ public class KojisPawn {
                     int taskNumber = Integer.parseInt(command.substring(7));
                     int taskIndex = taskNumber - 1;
                     unmarkTask(taskIndex);
-                } else if (command.startsWith("todo ")) {
-                    String description = command.substring(5);
+                } else if (command.equals("todo") || command.startsWith("todo ")) {
+                    String description = command.equals("todo") ? "" : command.substring(5);
+                    if (description.isBlank()) {
+                        throw new KojisPawnException(
+                                "An empty task has no place in the plan. Describe what must be done after todo.");
+                    }
                     addTask(new Todo(description));
                 } else if (command.startsWith("deadline ")) {
                     String deadlineDetails = command.substring(9);
