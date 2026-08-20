@@ -38,6 +38,12 @@ public class KojisPawn {
             } else if (command.startsWith("todo ")) {
                 String description = command.substring(5);
                 addTask(new Todo(description));
+            } else if (command.startsWith("deadline ")) {
+                String deadlineDetails = command.substring(9);
+                int byIndex = deadlineDetails.indexOf(" /by ");
+                String description = deadlineDetails.substring(0, byIndex);
+                String by = deadlineDetails.substring(byIndex + 5);
+                addTask(new Deadline(description, by));
             } else {
                 addTask(new Task(command));
             }

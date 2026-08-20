@@ -57,3 +57,26 @@ class Todo extends Task {
         return "[T]" + super.toString();
     }
 }
+
+/**
+ * task that must be completed by a specified date or time.
+ */
+class Deadline extends Task {
+    protected String by;
+
+    /**
+     * Creates an incomplete deadline with the given description and deadline.
+     *
+     * @param description description of the deadline task
+     * @param by date or time by which the task should be completed
+     */
+    public Deadline(String description, String by) {
+        super(description);
+        this.by = by;
+    }
+
+    @Override
+    public String toString() {
+        return "[D]" + super.toString() + " (by: " + by + ")";
+    }
+}
