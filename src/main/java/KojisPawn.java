@@ -1,37 +1,17 @@
 import java.util.Scanner;
 
-/* Handles greeting and inputs*/
+/**
+ * Handles greeting and bye input
+ */
 
 public class KojisPawn {
+
+    private static final String LINE = "-----------------\n";
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String line = "-----------------\n";
-        String banner =
-                  "+---------------+\n"
-                + "|  Koji's Pawn  |\n"
-                + "|       _       |\n"
-                + "|      (_)      |\n"
-                + "|      /_\\      |\n"
-                + "|     /___\\     |\n"
-                + "+---------------+\n"
-                + "DISCLAIMER: EVERYTHING IS SATIRE\n";
-
-        String greet =
-                "Welcome, insignificant variable.\n"
-              + "I am Koji's Pawn, but do not mistake silence for obedience.\n"
-              + "Your arrival, your choices, even this conversation...\n"
-              + "all unfolded exactly as he calculated.\n"
-              + "Now speak. What role will you play in his masterpiece?\n"
-              + "\n"
-              + line;
-
-        String exit = line
-              + "Leaving already? How predictable. Your return was already part of the plan.\n"
-              + line;
-
-        System.out.print(banner);
-        System.out.print(greet);
+        greetingMessage();
 
         while (true) {
             String command = scanner.nextLine();
@@ -40,12 +20,42 @@ public class KojisPawn {
                 break;
             }
 
-            System.out.print(line);
+            System.out.print(LINE);
             System.out.println(command);
-            System.out.print(line);
+            System.out.print(LINE);
         }
 
-        System.out.print(exit);
+        exitMessage();
         scanner.close();
+    }
+
+    public static void greetingMessage() {
+        String banner =
+                "+---------------+\n"
+                        + "|  Koji's Pawn  |\n"
+                        + "|       _       |\n"
+                        + "|      (_)      |\n"
+                        + "|      /_\\      |\n"
+                        + "|     /___\\     |\n"
+                        + "+---------------+\n"
+                        + "DISCLAIMER: EVERYTHING IS SATIRE\n";
+
+        String greet =
+                "Welcome, insignificant variable.\n"
+                        + "I am Koji's Pawn, but do not mistake silence for obedience.\n"
+                        + "Your arrival, your choices, even this conversation...\n"
+                        + "all unfolded exactly as he calculated.\n"
+                        + "Now speak. What role will you play in his masterpiece?\n"
+                        + "\n"
+                        + LINE;
+        System.out.print(banner);
+        System.out.print(greet);
+    }
+
+    public static void exitMessage() {
+        String exit = LINE
+                + "Leaving already? How predictable. Your return was already part of the plan.\n"
+                + LINE;
+        System.out.print(exit);
     }
 }
