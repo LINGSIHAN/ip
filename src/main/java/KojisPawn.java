@@ -43,12 +43,8 @@ public class KojisPawn {
                                 "An empty task has no place in the plan. Describe what must be done after todo.");
                     }
                     addTask(new Todo(description));
-                } else if (command.startsWith("deadline ")) {
-                    String deadlineDetails = command.substring(9);
-                    int byIndex = deadlineDetails.indexOf(" /by ");
-                    String description = deadlineDetails.substring(0, byIndex);
-                    String by = deadlineDetails.substring(byIndex + 5);
-                    addTask(new Deadline(description, by));
+                } else if (command.equals("deadline") || command.startsWith("deadline ")) {
+                    addDeadline(command);
                 } else if (command.startsWith("event ")) {
                     String eventDetails = command.substring(6);
                     int fromIndex = eventDetails.indexOf(" /from ");
@@ -125,6 +121,49 @@ public class KojisPawn {
         String taskWord = taskCount == 1 ? "task" : "tasks";
         System.out.println("Now you have " + taskCount + " " + taskWord + " in the list.");
         System.out.print(LINE);
+    }
+
+    /**
+     * Validates and adds a deadline command.
+     *
+     * @param command complete deadline command entered by the user
+     * @throws KojisPawnException if the description, {@code /by} marker, or deadline value is missing
+     */
+    private static void addDeadline(String command) throws KojisPawnException {
+        String deadlineDetails = command.equals("deadline") ? "" : command.substring(9);
+        if (deadlineDetails.isBlank()) {
+            throw new KojisPawnException(
+                    "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
+        }
+        if (deadlineDetails.startsWith("/by")) {
+            throw new KojisPawnException(
+                    "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
+        }
+
+        String byMarker = " /by";
+        int byIndex = deadlineDetails.indexOf(byMarker);
+        if (byIndex == -1) {
+            throw new KojisPawnException(
+                    "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
+        }
+
+        String description = deadlineDetails.substring(0, byIndex);
+        if (description.isBlank()) {
+            throw new KojisPawnException(
+                    "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
+        }
+
+        int byStartIndex = byIndex + byMarker.length();
+        String by = deadlineDetails.substring(byStartIndex);
+        if (by.isBlank()) {
+            throw new KojisPawnException("The plan requires a deadline value after /by.");
+        }
+        if (!by.startsWith(" ")) {
+            throw new KojisPawnException(
+                    "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
+        }
+
+        addTask(new Deadline(description, by.substring(1)));
     }
 
     /**

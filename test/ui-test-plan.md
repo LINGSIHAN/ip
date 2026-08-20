@@ -205,3 +205,62 @@ Now you have 1 task in the list.
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Invalid deadline recovery
+
+Aim: Verify deadline descriptions, /by markers, and deadline values are required before a task is added.
+
+### Commands
+
+```text
+deadline
+deadline /by Sunday
+deadline submit report
+deadline submit report /by
+deadline submit report /by Sunday
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.
+-----------------
+-----------------
+A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.
+-----------------
+-----------------
+Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.
+-----------------
+-----------------
+The plan requires a deadline value after /by.
+-----------------
+-----------------
+Got it. I've added this task:
+  [D][ ] submit report (by: Sunday)
+Now you have 1 task in the list.
+-----------------
+-----------------
+1.[D][ ] submit report (by: Sunday)
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
