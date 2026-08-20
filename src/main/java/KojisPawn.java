@@ -15,12 +15,17 @@ public class KojisPawn {
 
         while (true) {
             String command = scanner.nextLine().strip();
+            CommandType commandType = CommandType.from(command);
 
-            if (command.equals("bye")) {
+            if (commandType == CommandType.BYE && command.equals("bye")) {
                 break;
             }
             try {
-                if (command.equals("list")) {
+                switch (commandType) {
+                case LIST:
+                    if (!command.equals("list")) {
+                        throw createUnknownCommandException();
+                    }
                     System.out.print(LINE);
 
                     for (int i = 0; i < toDoList.size(); i++) {
@@ -28,30 +33,36 @@ public class KojisPawn {
                     }
 
                     System.out.print(LINE);
-                } else if (hasCommandWord(command, "mark")) {
+                    break;
+                case MARK:
                     int taskIndex = getTaskIndex(command, "mark");
                     markTask(taskIndex);
-                } else if (hasCommandWord(command, "unmark")) {
-                    int taskIndex = getTaskIndex(command, "unmark");
-                    unmarkTask(taskIndex);
-                } else if (hasCommandWord(command, "delete")) {
-                    int taskIndex = getTaskIndex(command, "delete");
-                    deleteTask(taskIndex);
-                } else if (hasCommandWord(command, "todo")) {
+                    break;
+                case UNMARK:
+                    int unmarkIndex = getTaskIndex(command, "unmark");
+                    unmarkTask(unmarkIndex);
+                    break;
+                case DELETE:
+                    int deleteIndex = getTaskIndex(command, "delete");
+                    deleteTask(deleteIndex);
+                    break;
+                case TODO:
                     String description = command.substring("todo".length()).strip();
                     if (description.isBlank()) {
                         throw new KojisPawnException(
                                 "An empty task has no place in the plan. Describe what must be done after todo.");
                     }
                     addTask(new Todo(description));
-                } else if (hasCommandWord(command, "deadline")) {
+                    break;
+                case DEADLINE:
                     addDeadline(command);
-                } else if (hasCommandWord(command, "event")) {
+                    break;
+                case EVENT:
                     addEvent(command);
-                } else {
-                    throw new KojisPawnException(
-                            "That command was never part of the plan. "
-                                    + "Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+                    break;
+                case BYE:
+                case UNKNOWN:
+                    throw createUnknownCommandException();
                 }
             } catch (KojisPawnException exception) {
                 showError(exception.getMessage());
@@ -104,17 +115,14 @@ public class KojisPawn {
     }
 
     /**
-     * Checks whether input consists of the given command word followed by optional arguments.
+     * Creates the standard exception used for unrecognized or malformed command words.
      *
-     * @param command normalized user input
-     * @param commandWord command word to find
-     * @return true if the input starts with the complete command word
+     * @return exception containing guidance about the supported commands
      */
-    private static boolean hasCommandWord(String command, String commandWord) {
-        return command.equals(commandWord)
-                || (command.startsWith(commandWord)
-                && command.length() > commandWord.length()
-                && Character.isWhitespace(command.charAt(commandWord.length())));
+    private static KojisPawnException createUnknownCommandException() {
+        return new KojisPawnException(
+                "That command was never part of the plan. "
+                        + "Try todo, deadline, event, list, mark, unmark, delete, or bye.");
     }
 
     /**
