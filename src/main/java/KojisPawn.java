@@ -5,8 +5,7 @@ import java.util.Scanner;
  * Runs the chatbot and handles adding, listing, and marking tasks.
  */
 public class KojisPawn {
-    private static ArrayList<String> toDoList = new ArrayList<>();
-    private static ArrayList<Boolean> taskStatuses = new ArrayList<>();
+    private static ArrayList<Task> toDoList = new ArrayList<>();
     private static final String LINE = "-----------------\n";
 
     public static void main(String[] args) {
@@ -24,8 +23,7 @@ public class KojisPawn {
                 System.out.print(LINE);
 
                 for (int i = 0; i < toDoList.size(); i++) {
-                    String statusIcon = taskStatuses.get(i) ? "X" : " ";
-                    System.out.println((i + 1) + ".[" + statusIcon + "] " + toDoList.get(i));
+                    System.out.println((i + 1) + "." + toDoList.get(i));
                 }
 
                 System.out.print(LINE);
@@ -82,36 +80,37 @@ public class KojisPawn {
     /**
      * Adds a new incomplete task to the task list.
      *
-     * @param string description of the task to add
+     * @param description description of the task to add
      */
-    private static void addTask(String string) {
-        toDoList.add(string);
-        taskStatuses.add(false);
+    private static void addTask(String description) {
+        toDoList.add(new Task(description));
     }
 
     /**
-     * Marks the selected task as complete and displays a confirmation.
+     * Marks the selected task as complete
      *
      * @param index zero-based index of the task to mark
      */
     private static void markTask(int index) {
-        taskStatuses.set(index, true);
+        Task task = toDoList.get(index);
+        task.markAsDone();
         System.out.print(LINE);
         System.out.println("Another variable falls into place. This task is now complete:");
-        System.out.println("  [X] " + toDoList.get(index));
+        System.out.println("  " + task);
         System.out.print(LINE);
     }
 
     /**
-     * Marks the selected task as incomplete and displays a confirmation.
+     * Marks the selected task as incomplete
      *
      * @param index zero-based index of the task to unmark
      */
     private static void unmarkTask(int index) {
-        taskStatuses.set(index, false);
+        Task task = toDoList.get(index);
+        task.markAsNotDone();
         System.out.print(LINE);
         System.out.println("Even regression has its purpose. This task is incomplete once more:");
-        System.out.println("  [ ] " + toDoList.get(index));
+        System.out.println("  " + task);
         System.out.print(LINE);
     }
 }
