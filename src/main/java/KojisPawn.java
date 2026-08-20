@@ -8,6 +8,16 @@ public class KojisPawn {
                 + "|      /_\\      |\n"
                 + "|     /___\\     |\n"
                 + "+---------------+\n";
-        System.out.println(banner);
+        String greet =
+                "Hello! I am Koji's Pawn.\n"
+              + "What can I do for you?\n"
+              + "\n"
+              + "-----------------\n"
+              + "Bye. Hope to see you again soon!\n"
+              + "-----------------";
+
+        System.out.print(banner);
+        System.out.println(greet);
+
     }
 }
