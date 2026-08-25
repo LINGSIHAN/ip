@@ -39,6 +39,8 @@ public class Task {
     }
 }
 
+/*============================================================================*/
+
 /**
  * task with no attached date nor time.
  */
@@ -57,6 +59,8 @@ class Todo extends Task {
         return "[T]" + super.toString();
     }
 }
+
+/*============================================================================*/
 
 /**
  * task that must be completed by a specified date or time.
@@ -80,6 +84,8 @@ class Deadline extends Task {
         return "[D]" + super.toString() + " (by: " + by + ")";
     }
 }
+
+/*============================================================================*/
 
 /**
  * task that takes place between specified start and end times.
