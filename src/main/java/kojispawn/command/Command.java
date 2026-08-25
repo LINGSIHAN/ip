@@ -16,9 +16,9 @@ public class Command {
     /**
      * Creates a command with any task data required for its execution.
      *
-     * @param type type of command
-     * @param task task to add, or {@code null} when the command does not add one
-     * @param taskNumber one-based task number, or {@code null} when none is required
+     * @param type Type of command.
+     * @param task Task to add, or {@code null} when the command does not add one.
+     * @param taskNumber One-based task number, or {@code null} when none is required.
      */
     public Command(CommandType type, Task task, Integer taskNumber) {
         this(type, task, taskNumber, null);
@@ -27,10 +27,10 @@ public class Command {
     /**
      * Creates a command that can also carry a date for date-based queries.
      *
-     * @param type type of command
-     * @param task task to add, or {@code null} when the command does not add one
-     * @param taskNumber one-based task number, or {@code null} when none is required
-     * @param date date to query, or {@code null} when none is required
+     * @param type Type of command.
+     * @param task Task to add, or {@code null} when the command does not add one.
+     * @param taskNumber One-based task number, or {@code null} when none is required.
+     * @param date Date to query, or {@code null} when none is required.
      */
     public Command(CommandType type, Task task, Integer taskNumber, LocalDate date) {
         this.type = type;

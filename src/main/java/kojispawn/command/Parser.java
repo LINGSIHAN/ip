@@ -16,9 +16,9 @@ public class Parser {
     /**
      * Parses one line of user input.
      *
-     * @param input command entered by the user
-     * @return validated command ready for execution
-     * @throws KojisPawnException if the command or its arguments are invalid
+     * @param input Command entered by the user.
+     * @return Validated command ready for execution.
+     * @throws KojisPawnException If the command or its arguments are invalid.
      */
     public Command parse(String input) throws KojisPawnException {
         String command = input.strip();
