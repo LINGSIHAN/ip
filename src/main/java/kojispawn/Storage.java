@@ -1,3 +1,5 @@
+package kojispawn;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.nio.file.Files;

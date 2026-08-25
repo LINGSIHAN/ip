@@ -1,3 +1,5 @@
+package kojispawn;
+
 import java.nio.file.Path;
 
 /**

@@ -15,7 +15,7 @@ REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
 PLAN_PATH = REPOSITORY_ROOT / "test" / "ui-test-plan.md"
 SOURCE_DIRECTORY = REPOSITORY_ROOT / "src" / "main" / "java"
 BUILD_DIRECTORY = REPOSITORY_ROOT / "out" / "test-ui"
-MAIN_CLASS = "KojisPawn"
+MAIN_CLASS = "kojispawn.KojisPawn"
 
 
 def find_java_tools() -> tuple[Path, Path]:
@@ -99,7 +99,7 @@ def parse_test_plan() -> list[dict[str, str]]:
 def compile_program(javac: Path) -> None:
     """Compile all application sources into the ignored test build directory."""
     BUILD_DIRECTORY.mkdir(parents=True, exist_ok=True)
-    sources = sorted(SOURCE_DIRECTORY.glob("*.java"))
+    sources = sorted(SOURCE_DIRECTORY.rglob("*.java"))
     if not sources:
         raise RuntimeError(f"No Java sources found in {SOURCE_DIRECTORY}")
 
