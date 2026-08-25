@@ -1,6 +1,8 @@
-package kojispawn;
+package kojispawn.command;
 
 import java.time.LocalDate;
+
+import kojispawn.task.Task;
 
 /**
  * Represents a validated instruction that Koji's Pawn can execute.

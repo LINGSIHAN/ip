@@ -1,4 +1,4 @@
-package kojispawn;
+package kojispawn.task;
 
 /**
  * Represents a task with no attached date or time.

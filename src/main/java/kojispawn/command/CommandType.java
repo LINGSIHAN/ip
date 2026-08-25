@@ -1,4 +1,4 @@
-package kojispawn;
+package kojispawn.command;
 
 /**
  * Identifies the command that Koji's Pawn should perform.

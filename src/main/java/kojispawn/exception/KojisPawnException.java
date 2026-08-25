@@ -1,4 +1,4 @@
-package kojispawn;
+package kojispawn.exception;
 
 /**
  * Represents an error caused by a command that Koji's Pawn cannot process.

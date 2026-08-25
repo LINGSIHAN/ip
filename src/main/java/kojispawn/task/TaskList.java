@@ -1,9 +1,11 @@
-package kojispawn;
+package kojispawn.task;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import kojispawn.exception.KojisPawnException;
 
 /**
  * Owns and manages the tasks in Koji's Pawn.

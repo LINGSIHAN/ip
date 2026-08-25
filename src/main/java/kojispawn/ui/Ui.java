@@ -1,8 +1,10 @@
-package kojispawn;
+package kojispawn.ui;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
+
+import kojispawn.task.Task;
 
 /**
  * Handles all console input and output for Koji's Pawn.
