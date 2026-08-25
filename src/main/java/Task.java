@@ -1,7 +1,7 @@
 /**
  * Represents a task with a description and completion status.
  */
-public class Task {
+public abstract class Task {
     protected String description;
     protected boolean isDone;
 
@@ -32,6 +32,13 @@ public class Task {
     public void markAsNotDone() {
         isDone = false;
     }
+
+    /**
+     * Converts this task into the stable format used in the data file.
+     *
+     * @return serialized task data
+     */
+    public abstract String toDataString();
 
     @Override
     public String toString() {
