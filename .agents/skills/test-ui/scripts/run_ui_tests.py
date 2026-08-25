@@ -8,6 +8,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[4]
@@ -74,6 +75,9 @@ def parse_test_plan() -> list[dict[str, str]]:
         expected_match = re.search(
             r"### Expected output\s*\n```text\n(.*?)\n```", body, re.DOTALL
         )
+        initial_data_match = re.search(
+            r"### Initial data\s*\n```text\n(.*?)\n```", body, re.DOTALL
+        )
 
         if not aim_match or not commands_match or not expected_match:
             raise ValueError(f"Incomplete test case definition: {name}")
@@ -83,6 +87,7 @@ def parse_test_plan() -> list[dict[str, str]]:
             "aim": aim_match.group(1).strip(),
             "commands": commands_match.group(1),
             "expected": expected_match.group(1),
+            "initial_data": initial_data_match.group(1) if initial_data_match else None,
         })
 
     if not cases:
@@ -119,13 +124,20 @@ def normalise_output(text: str) -> str:
 def run_case(java: Path, case: dict[str, str]) -> bool:
     """Run one stateful command sequence and compare its exact output."""
     commands = case["commands"] + "\n"
-    result = subprocess.run(
-        [str(java), "-cp", str(BUILD_DIRECTORY), MAIN_CLASS],
-        input=commands,
-        capture_output=True,
-        text=True,
-        check=False,
-    )
+    with tempfile.TemporaryDirectory(prefix="kojispawn-ui-test-") as working_directory:
+        if case["initial_data"] is not None:
+            data_file = Path(working_directory) / "data" / "kojispawn.txt"
+            data_file.parent.mkdir(parents=True)
+            data_file.write_text(case["initial_data"] + "\n", encoding="utf-8")
+
+        result = subprocess.run(
+            [str(java), "-cp", str(BUILD_DIRECTORY), MAIN_CLASS],
+            input=commands,
+            capture_output=True,
+            text=True,
+            check=False,
+            cwd=working_directory,
+        )
     actual = normalise_output(result.stdout)
     expected = normalise_output(case["expected"])
 
@@ -170,4 +182,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

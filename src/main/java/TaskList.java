@@ -6,7 +6,20 @@ import java.util.List;
  * Owns and manages the tasks in Koji's Pawn.
  */
 public class TaskList {
-    private final List<Task> tasks = new ArrayList<>();
+    private final List<Task> tasks;
+
+    public TaskList() {
+        this.tasks = new ArrayList<>();
+    }
+
+    /**
+     * Creates a task list containing tasks loaded from storage.
+     *
+     * @param tasks tasks to place in the list
+     */
+    public TaskList(List<Task> tasks) {
+        this.tasks = new ArrayList<>(tasks);
+    }
 
     /**
      * Adds a task to the end of the list.

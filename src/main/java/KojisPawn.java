@@ -1,18 +1,22 @@
+import java.nio.file.Path;
+
 /**
  * Coordinates input parsing, task management, and user interaction.
  */
 public class KojisPawn {
     private final Parser parser;
+    private final Storage storage;
     private final TaskList tasks;
     private final Ui ui;
 
-    public KojisPawn() {
+    public KojisPawn() throws KojisPawnException {
         this.parser = new Parser();
-        this.tasks = new TaskList();
+        this.storage = new Storage(Path.of("data", "kojispawn.txt"));
+        this.tasks = new TaskList(storage.load());
         this.ui = new Ui();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws KojisPawnException {
         new KojisPawn().run();
     }
 
@@ -49,19 +53,26 @@ public class KojisPawn {
         case DEADLINE:
         case EVENT:
             tasks.add(command.getTask());
+            storage.save(tasks);
             ui.showTaskAdded(command.getTask(), tasks.size());
             break;
         case LIST:
             ui.showTaskList(tasks.getTasks());
             break;
         case MARK:
-            ui.showTaskMarked(tasks.mark(command.getTaskNumber()));
+            Task markedTask = tasks.mark(command.getTaskNumber());
+            storage.save(tasks);
+            ui.showTaskMarked(markedTask);
             break;
         case UNMARK:
-            ui.showTaskUnmarked(tasks.unmark(command.getTaskNumber()));
+            Task unmarkedTask = tasks.unmark(command.getTaskNumber());
+            storage.save(tasks);
+            ui.showTaskUnmarked(unmarkedTask);
             break;
         case DELETE:
-            ui.showTaskDeleted(tasks.delete(command.getTaskNumber()), tasks.size());
+            Task deletedTask = tasks.delete(command.getTaskNumber());
+            storage.save(tasks);
+            ui.showTaskDeleted(deletedTask, tasks.size());
             break;
         case BYE:
             return false;
