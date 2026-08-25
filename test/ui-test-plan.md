@@ -2,6 +2,53 @@
 
 The `test-ui` skill runs each test case in a fresh chatbot process. Update expected output whenever an intentional UI change occurs.
 
+## Load saved tasks
+
+Aim: Verify saved Todo, Deadline, and Event tasks and their completion states are restored at startup.
+
+### Initial data
+
+```text
+T | 0 | borrow book
+D | 1 | return book | Sunday
+E | 0 | project meeting | Mon 2pm | 4pm
+```
+
+### Commands
+
+```text
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+1.[T][ ] borrow book
+2.[D][X] return book (by: Sunday)
+3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
+
 ## Level 4 task lifecycle
 
 Aim: Verify Todo, Deadline, and Event creation, listing, marking, unmarking, task counts, and exit behavior.

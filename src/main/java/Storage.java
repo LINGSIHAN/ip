@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,6 +17,30 @@ public class Storage {
      */
     public Storage(Path filePath) {
         this.filePath = filePath;
+    }
+
+    /**
+     * Loads tasks from the data file, preserving their types and completion states.
+     *
+     * @return tasks stored in the file, or an empty list when the file does not exist
+     * @throws KojisPawnException if the file cannot be read
+     */
+    public List<Task> load() throws KojisPawnException {
+        if (!Files.exists(filePath)) {
+            return new ArrayList<>();
+        }
+
+        try {
+            List<Task> tasks = new ArrayList<>();
+            for (String taskLine : Files.readAllLines(filePath)) {
+                if (!taskLine.isBlank()) {
+                    tasks.add(parseTask(taskLine));
+                }
+            }
+            return tasks;
+        } catch (IOException exception) {
+            throw new KojisPawnException("I could not load the task list from " + filePath + ".");
+        }
     }
 
     /**
@@ -38,5 +63,23 @@ public class Storage {
         } catch (IOException exception) {
             throw new KojisPawnException("I could not save the task list to " + filePath + ".");
         }
+    }
+
+    /**
+     * Reconstructs one task from the format produced by {@link Task#toDataString()}.
+     */
+    private Task parseTask(String taskLine) {
+        String[] fields = taskLine.split(" \\| ", -1);
+        Task task = switch (fields[0]) {
+        case "T" -> new Todo(fields[2]);
+        case "D" -> new Deadline(fields[2], fields[3]);
+        case "E" -> new Event(fields[2], fields[3], fields[4]);
+        default -> throw new IllegalArgumentException("Unknown stored task type: " + fields[0]);
+        };
+
+        if (fields[1].equals("1")) {
+            task.markAsDone();
+        }
+        return task;
     }
 }

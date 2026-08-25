@@ -9,14 +9,14 @@ public class KojisPawn {
     private final TaskList tasks;
     private final Ui ui;
 
-    public KojisPawn() {
+    public KojisPawn() throws KojisPawnException {
         this.parser = new Parser();
         this.storage = new Storage(Path.of("data", "kojispawn.txt"));
-        this.tasks = new TaskList();
+        this.tasks = new TaskList(storage.load());
         this.ui = new Ui();
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws KojisPawnException {
         new KojisPawn().run();
     }
 
