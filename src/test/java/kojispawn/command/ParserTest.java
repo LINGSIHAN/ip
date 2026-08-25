@@ -65,6 +65,14 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_validFind_returnsSearchKeyword() throws KojisPawnException {
+        Command command = parser.parse("find return book");
+
+        assertEquals(CommandType.FIND, command.getType());
+        assertEquals("return book", command.getKeyword());
+    }
+
+    @Test
     public void parse_impossibleDeadlineDate_throwsException() {
         KojisPawnException exception = assertThrows(KojisPawnException.class,
                 () -> parser.parse("deadline return book /by 2019-02-30"));
@@ -86,5 +94,13 @@ public class ParserTest {
     @Test
     public void parse_listWithExtraArguments_throwsException() {
         assertThrows(KojisPawnException.class, () -> parser.parse("list please"));
+    }
+
+    @Test
+    public void parse_findWithoutKeyword_throwsException() {
+        KojisPawnException exception = assertThrows(KojisPawnException.class,
+                () -> parser.parse("find"));
+
+        assertEquals("Specify a keyword. Use: find KEYWORD.", exception.getMessage());
     }
 }

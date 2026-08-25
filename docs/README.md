@@ -1,6 +1,6 @@
 # Koji's Pawn User Guide
 
-Koji's Pawn is a command-line chatbot that manages todos, deadlines, and events. It automatically saves tasks between sessions and can find deadlines occurring on a specified date.
+Koji's Pawn is a command-line chatbot that manages todos, deadlines, and events. It automatically saves tasks between sessions and can search task descriptions or find deadlines occurring on a specified date.
 
 ## Command reference
 
@@ -16,6 +16,7 @@ Enter one command per line. Command words must be written in lowercase. Words sh
 | `unmark` | Marks the selected task as incomplete again. | `unmark TASK_NUMBER` |
 | `delete` | Permanently removes the selected task from the list. | `delete TASK_NUMBER` |
 | `on` | Displays deadlines occurring on a specified date. Todos and free-form events are not included. | `on yyyy-MM-dd` |
+| `find` | Displays tasks whose descriptions contain a keyword. | `find KEYWORD` |
 | `bye` | Exits the chatbot. Task changes have already been saved automatically. | `bye` |
 
 ## Command examples
@@ -63,6 +64,14 @@ on 2019-12-02
 ```
 
 If no deadline occurs on that date, Koji's Pawn reports that no dated tasks were found.
+
+### Finding tasks by description
+
+```text
+find book
+```
+
+The search is case-sensitive and checks only task descriptions.
 
 ### Exiting the chatbot
 

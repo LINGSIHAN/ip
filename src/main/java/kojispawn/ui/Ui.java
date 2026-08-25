@@ -79,6 +79,20 @@ public class Ui {
         System.out.print(LINE);
     }
 
+    /**
+     * Displays tasks whose descriptions match a search keyword.
+     *
+     * @param tasks Matching tasks.
+     */
+    public void showMatchingTasks(List<Task> tasks) {
+        System.out.print(LINE);
+        System.out.println("Here are the matching tasks in your list:");
+        for (int i = 0; i < tasks.size(); i++) {
+            System.out.println((i + 1) + "." + tasks.get(i));
+        }
+        System.out.print(LINE);
+    }
+
     public void showTaskAdded(Task task, int taskCount) {
         System.out.print(LINE);
         System.out.println("Got it. I've added this task:");

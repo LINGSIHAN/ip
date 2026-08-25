@@ -265,7 +265,7 @@ Now speak. What role will you play in his masterpiece?
 
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, find, or bye.
 -----------------
 -----------------
 Got it. I've added this task:
@@ -675,7 +675,7 @@ Even calculated events need an endpoint. Include /to END.
 No task occupies that position. Choose a number from 1 to 1.
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, find, or bye.
 -----------------
 -----------------
 Got it. I've added this task:
@@ -782,6 +782,71 @@ Now you have 1 task in the list.
 A disposable piece has left the board. This task has been removed:
   [T][ ] first piece
 Now you have 0 tasks in the list.
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
+
+## Find tasks by description
+
+Aim: Verify find matches only case-sensitive task descriptions, handles no matches, and rejects a missing keyword.
+
+### Commands
+
+```text
+todo read book
+deadline return book /by 2019-12-02
+event project meeting /from book club /to 4pm
+find book
+find Book
+find
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] read book
+Now you have 1 task in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [D][ ] return book (by: Dec 2 2019)
+Now you have 2 tasks in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [E][ ] project meeting (from: book club to: 4pm)
+Now you have 3 tasks in the list.
+-----------------
+-----------------
+Here are the matching tasks in your list:
+1.[T][ ] read book
+2.[D][ ] return book (by: Dec 2 2019)
+-----------------
+-----------------
+Here are the matching tasks in your list:
+-----------------
+-----------------
+Specify a keyword. Use: find KEYWORD.
 -----------------
 -----------------
 Leaving already? How predictable. Your return was already part of the plan.

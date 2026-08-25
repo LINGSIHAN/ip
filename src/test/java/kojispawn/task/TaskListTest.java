@@ -57,6 +57,24 @@ public class TaskListTest {
     }
 
     @Test
+    public void find_keyword_returnsOnlyTasksWithMatchingDescriptions() {
+        TaskList taskList = new TaskList(List.of(
+                new Todo("read book"),
+                new Deadline("return book", LocalDate.of(2019, 12, 2)),
+                new Event("project meeting", "book club", "4pm"),
+                new Todo("write notes")));
+
+        List<String> matches = taskList.find("book").stream()
+                .map(Task::toString)
+                .toList();
+
+        assertEquals(List.of(
+                "[T][ ] read book",
+                "[D][ ] return book (by: Dec 2 2019)"), matches);
+        assertEquals(List.of(), taskList.find("2019"));
+    }
+
+    @Test
     public void markThenUnmark_validTask_changesCompletionState() throws KojisPawnException {
         TaskList taskList = new TaskList(List.of(new Todo("read book")));
 
