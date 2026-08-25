@@ -74,6 +74,9 @@ public class KojisPawn {
             storage.save(tasks);
             ui.showTaskDeleted(deletedTask, tasks.size());
             break;
+        case ON:
+            ui.showTasksOnDate(tasks.findOn(command.getDate()), command.getDate());
+            break;
         case BYE:
             return false;
         case UNKNOWN:

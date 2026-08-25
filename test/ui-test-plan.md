@@ -159,6 +159,80 @@ Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
 
+## Find deadlines by date
+
+Aim: Verify the on command finds deadlines by date, excludes undated tasks, and validates its date.
+
+### Commands
+
+```text
+todo undated task
+deadline return book /by 2019-12-02
+deadline submit report /by 2019-12-03
+event project meeting /from 2019-12-02 2pm /to 4pm
+on 2019-12-02
+on 2019-12-04
+on
+on 2019-02-29
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] undated task
+Now you have 1 task in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [D][ ] return book (by: Dec 2 2019)
+Now you have 2 tasks in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [D][ ] submit report (by: Dec 3 2019)
+Now you have 3 tasks in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [E][ ] project meeting (from: 2019-12-02 2pm to: 4pm)
+Now you have 4 tasks in the list.
+-----------------
+-----------------
+Dated tasks occurring on 2019-12-02:
+1.[D][ ] return book (by: Dec 2 2019)
+-----------------
+-----------------
+No dated tasks occur on 2019-12-04.
+-----------------
+-----------------
+Specify a date. Use: on yyyy-MM-dd.
+-----------------
+-----------------
+Query dates must use yyyy-MM-dd and describe a real calendar date.
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
+
 ## Unknown command recovery
 
 Aim: Verify an unknown command produces a helpful error and does not prevent the next valid command from running.
@@ -191,7 +265,7 @@ Now speak. What role will you play in his masterpiece?
 
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, or bye.
 -----------------
 -----------------
 Got it. I've added this task:
@@ -601,7 +675,7 @@ Even calculated events need an endpoint. Include /to END.
 No task occupies that position. Choose a number from 1 to 1.
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, or bye.
 -----------------
 -----------------
 Got it. I've added this task:

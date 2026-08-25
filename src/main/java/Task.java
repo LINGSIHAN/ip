@@ -1,3 +1,5 @@
+import java.time.LocalDate;
+
 /**
  * Represents a task with a description and completion status.
  */
@@ -39,6 +41,17 @@ public abstract class Task {
      * @return serialized task data
      */
     public abstract String toDataString();
+
+    /**
+     * Reports whether this task occurs on a given date.
+     * Tasks without a structured date do not occur on any queryable date.
+     *
+     * @param date date to check
+     * @return {@code true} if the task occurs on the date
+     */
+    public boolean occursOn(LocalDate date) {
+        return false;
+    }
 
     @Override
     public String toString() {

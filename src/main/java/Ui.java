@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Scanner;
 
@@ -51,6 +52,25 @@ public class Ui {
         System.out.print(LINE);
         for (int i = 0; i < tasks.size(); i++) {
             System.out.println((i + 1) + "." + tasks.get(i));
+        }
+        System.out.print(LINE);
+    }
+
+    /**
+     * Displays tasks occurring on a requested date.
+     *
+     * @param tasks tasks matching the date
+     * @param date queried date
+     */
+    public void showTasksOnDate(List<Task> tasks, LocalDate date) {
+        System.out.print(LINE);
+        if (tasks.isEmpty()) {
+            System.out.println("No dated tasks occur on " + date + ".");
+        } else {
+            System.out.println("Dated tasks occurring on " + date + ":");
+            for (int i = 0; i < tasks.size(); i++) {
+                System.out.println((i + 1) + "." + tasks.get(i));
+            }
         }
         System.out.print(LINE);
     }

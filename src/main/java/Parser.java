@@ -23,6 +23,7 @@ public class Parser {
         case MARK -> new Command(type, null, parseTaskNumber(command, "mark"));
         case UNMARK -> new Command(type, null, parseTaskNumber(command, "unmark"));
         case DELETE -> new Command(type, null, parseTaskNumber(command, "delete"));
+        case ON -> parseOn(command, type);
         case LIST, BYE -> parseExactCommand(command, type);
         case UNKNOWN -> throw createUnknownCommandException();
         };
@@ -142,6 +143,20 @@ public class Parser {
         return taskNumber;
     }
 
+    private Command parseOn(String command, CommandType type) throws KojisPawnException {
+        String dateText = command.substring("on".length()).strip();
+        if (dateText.isBlank()) {
+            throw new KojisPawnException("Specify a date. Use: on yyyy-MM-dd.");
+        }
+
+        try {
+            return new Command(type, null, null, LocalDate.parse(dateText));
+        } catch (DateTimeParseException exception) {
+            throw new KojisPawnException(
+                    "Query dates must use yyyy-MM-dd and describe a real calendar date.");
+        }
+    }
+
     private Command parseExactCommand(String command, CommandType type) throws KojisPawnException {
         if (!command.equals(type.name().toLowerCase())) {
             throw createUnknownCommandException();
@@ -152,6 +167,6 @@ public class Parser {
     private KojisPawnException createUnknownCommandException() {
         return new KojisPawnException(
                 "That command was never part of the plan. "
-                        + "Try todo, deadline, event, list, mark, unmark, delete, or bye.");
+                        + "Try todo, deadline, event, list, mark, unmark, delete, on, or bye.");
     }
 }
