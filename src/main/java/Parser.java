@@ -1,3 +1,6 @@
+import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+
 /**
  * Converts raw user input into validated commands.
  */
@@ -62,7 +65,12 @@ public class Parser {
             throw new KojisPawnException(
                     "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
         }
-        return new Deadline(description, by.strip());
+        try {
+            return new Deadline(description, LocalDate.parse(by.strip()));
+        } catch (DateTimeParseException exception) {
+            throw new KojisPawnException(
+                    "Deadline dates must use yyyy-MM-dd and describe a real calendar date.");
+        }
     }
 
     private Task parseEvent(String command) throws KojisPawnException {

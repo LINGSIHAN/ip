@@ -10,7 +10,7 @@ Aim: Verify saved Todo, Deadline, and Event tasks and their completion states ar
 
 ```text
 T | 0 | borrow book
-D | 1 | return book | Sunday
+D | 1 | return book | 2019-12-02
 E | 0 | project meeting | Mon 2pm | 4pm
 ```
 
@@ -41,7 +41,7 @@ Now speak. What role will you play in his masterpiece?
 -----------------
 -----------------
 1.[T][ ] borrow book
-2.[D][X] return book (by: Sunday)
+2.[D][X] return book (by: Dec 2 2019)
 3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
 -----------------
 -----------------
@@ -57,7 +57,7 @@ Aim: Verify Todo, Deadline, and Event creation, listing, marking, unmarking, tas
 
 ```text
 todo borrow book
-deadline return book /by Sunday
+deadline return book /by 2019-12-02
 event project meeting /from Mon 2pm /to 4pm
 list
 mark 2
@@ -90,7 +90,7 @@ Now you have 1 task in the list.
 -----------------
 -----------------
 Got it. I've added this task:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Dec 2 2019)
 Now you have 2 tasks in the list.
 -----------------
 -----------------
@@ -100,30 +100,30 @@ Now you have 3 tasks in the list.
 -----------------
 -----------------
 1.[T][ ] borrow book
-2.[D][ ] return book (by: Sunday)
+2.[D][ ] return book (by: Dec 2 2019)
 3.[E][ ] project meeting (from: Mon 2pm to: 4pm)
 -----------------
 -----------------
 Another variable falls into place. This task is now complete:
-  [D][X] return book (by: Sunday)
+  [D][X] return book (by: Dec 2 2019)
 -----------------
 -----------------
 Even regression has its purpose. This task is incomplete once more:
-  [D][ ] return book (by: Sunday)
+  [D][ ] return book (by: Dec 2 2019)
 -----------------
 -----------------
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
 
-## Free-form deadline text
+## ISO deadline parsing and display
 
-Aim: Verify deadline dates remain unparsed strings and punctuation is preserved.
+Aim: Verify an ISO deadline is stored as a date and displayed in a user-friendly format.
 
 ### Commands
 
 ```text
-deadline do homework /by no idea :-p
+deadline do homework /by 2019-10-15
 list
 bye
 ```
@@ -148,11 +148,11 @@ Now speak. What role will you play in his masterpiece?
 -----------------
 -----------------
 Got it. I've added this task:
-  [D][ ] do homework (by: no idea :-p)
+  [D][ ] do homework (by: Oct 15 2019)
 Now you have 1 task in the list.
 -----------------
 -----------------
-1.[D][ ] do homework (by: no idea :-p)
+1.[D][ ] do homework (by: Oct 15 2019)
 -----------------
 -----------------
 Leaving already? How predictable. Your return was already part of the plan.
@@ -255,7 +255,7 @@ Leaving already? How predictable. Your return was already part of the plan.
 
 ## Invalid deadline recovery
 
-Aim: Verify deadline descriptions, /by markers, and deadline values are required before a task is added.
+Aim: Verify deadline fields are required and dates use yyyy-MM-dd with valid calendar values.
 
 ### Commands
 
@@ -265,6 +265,9 @@ deadline /by Sunday
 deadline submit report
 deadline submit report /by
 deadline submit report /by Sunday
+deadline submit report /by 2019-02-29
+deadline submit report /by 15-10-2019
+deadline submit report /by 2020-02-29
 list
 bye
 ```
@@ -300,12 +303,21 @@ Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.
 The plan requires a deadline value after /by.
 -----------------
 -----------------
+Deadline dates must use yyyy-MM-dd and describe a real calendar date.
+-----------------
+-----------------
+Deadline dates must use yyyy-MM-dd and describe a real calendar date.
+-----------------
+-----------------
+Deadline dates must use yyyy-MM-dd and describe a real calendar date.
+-----------------
+-----------------
 Got it. I've added this task:
-  [D][ ] submit report (by: Sunday)
+  [D][ ] submit report (by: Feb 29 2020)
 Now you have 1 task in the list.
 -----------------
 -----------------
-1.[D][ ] submit report (by: Sunday)
+1.[D][ ] submit report (by: Feb 29 2020)
 -----------------
 -----------------
 Leaving already? How predictable. Your return was already part of the plan.
@@ -484,7 +496,7 @@ Aim: Verify leading and repeated structural spaces do not change stored task tex
 
 ```text
    todo    watch the room
-   deadline    submit report   /by    Friday
+   deadline    submit report   /by    2019-10-15
    event    observe class   /from    Mon 2pm   /to    4pm
    mark    1
    list
@@ -516,7 +528,7 @@ Now you have 1 task in the list.
 -----------------
 -----------------
 Got it. I've added this task:
-  [D][ ] submit report (by: Friday)
+  [D][ ] submit report (by: Oct 15 2019)
 Now you have 2 tasks in the list.
 -----------------
 -----------------
@@ -530,7 +542,7 @@ Another variable falls into place. This task is now complete:
 -----------------
 -----------------
 1.[T][X] watch the room
-2.[D][ ] submit report (by: Friday)
+2.[D][ ] submit report (by: Oct 15 2019)
 3.[E][ ] observe class (from: Mon 2pm to: 4pm)
 -----------------
 -----------------
@@ -619,7 +631,7 @@ Aim: Verify delete removes and returns the selected task, shifts later indices, 
 delete
 delete 1
 todo first piece
-deadline second piece /by Friday
+deadline second piece /by 2019-10-18
 event third piece /from Monday /to Tuesday
 delete one
 delete 0
@@ -662,7 +674,7 @@ Now you have 1 task in the list.
 -----------------
 -----------------
 Got it. I've added this task:
-  [D][ ] second piece (by: Friday)
+  [D][ ] second piece (by: Oct 18 2019)
 Now you have 2 tasks in the list.
 -----------------
 -----------------
@@ -681,7 +693,7 @@ No task occupies that position. Choose a number from 1 to 3.
 -----------------
 -----------------
 A disposable piece has left the board. This task has been removed:
-  [D][ ] second piece (by: Friday)
+  [D][ ] second piece (by: Oct 18 2019)
 Now you have 2 tasks in the list.
 -----------------
 -----------------
