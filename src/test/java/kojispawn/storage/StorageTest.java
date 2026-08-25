@@ -56,4 +56,17 @@ public class StorageTest {
                 "[E][ ] project meeting (from: Monday 2pm to: 4pm)"),
                 loadedTasks.stream().map(Task::toString).toList());
     }
+
+    @Test
+    public void save_existingFile_replacesPreviousContents() throws Exception {
+        Path dataFile = tempDirectory.resolve("kojispawn.txt");
+        Storage storage = new Storage(dataFile);
+        TaskList initialTasks = new TaskList(List.of(
+                new Todo("first task"), new Todo("stale task")));
+        storage.save(initialTasks);
+
+        storage.save(new TaskList(List.of(new Todo("replacement task"))));
+
+        assertEquals(List.of("T | 0 | replacement task"), Files.readAllLines(dataFile));
+    }
 }

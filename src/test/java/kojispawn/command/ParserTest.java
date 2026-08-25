@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import kojispawn.exception.KojisPawnException;
 import kojispawn.task.Deadline;
+import kojispawn.task.Event;
 import kojispawn.task.Todo;
 
 /**
@@ -46,6 +47,24 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_validEvent_returnsEventCommand() throws KojisPawnException {
+        Command command = parser.parse("event project meeting /from 2pm /to 4pm");
+
+        assertEquals(CommandType.EVENT, command.getType());
+        assertInstanceOf(Event.class, command.getTask());
+        assertEquals("[E][ ] project meeting (from: 2pm to: 4pm)",
+                command.getTask().toString());
+    }
+
+    @Test
+    public void parse_validMark_returnsOneBasedTaskNumber() throws KojisPawnException {
+        Command command = parser.parse("mark 3");
+
+        assertEquals(CommandType.MARK, command.getType());
+        assertEquals(3, command.getTaskNumber());
+    }
+
+    @Test
     public void parse_impossibleDeadlineDate_throwsException() {
         KojisPawnException exception = assertThrows(KojisPawnException.class,
                 () -> parser.parse("deadline return book /by 2019-02-30"));
@@ -57,5 +76,15 @@ public class ParserTest {
     @Test
     public void parse_unknownCommand_throwsException() {
         assertThrows(KojisPawnException.class, () -> parser.parse("dance now"));
+    }
+
+    @Test
+    public void parse_nonPositiveTaskNumber_throwsException() {
+        assertThrows(KojisPawnException.class, () -> parser.parse("delete 0"));
+    }
+
+    @Test
+    public void parse_listWithExtraArguments_throwsException() {
+        assertThrows(KojisPawnException.class, () -> parser.parse("list please"));
     }
 }
