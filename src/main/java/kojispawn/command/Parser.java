@@ -32,6 +32,7 @@ public class Parser {
             case UNMARK -> new Command(type, null, parseTaskNumber(command, "unmark"));
             case DELETE -> new Command(type, null, parseTaskNumber(command, "delete"));
             case ON -> parseOn(command, type);
+            case FIND -> parseFind(command, type);
             case LIST, BYE -> parseExactCommand(command, type);
             case UNKNOWN -> throw createUnknownCommandException();
         };
@@ -165,6 +166,14 @@ public class Parser {
         }
     }
 
+    private Command parseFind(String command, CommandType type) throws KojisPawnException {
+        String keyword = command.substring("find".length()).strip();
+        if (keyword.isBlank()) {
+            throw new KojisPawnException("Specify a keyword. Use: find KEYWORD.");
+        }
+        return new Command(type, keyword);
+    }
+
     private Command parseExactCommand(String command, CommandType type) throws KojisPawnException {
         if (!command.equals(type.name().toLowerCase())) {
             throw createUnknownCommandException();
@@ -175,6 +184,6 @@ public class Parser {
     private KojisPawnException createUnknownCommandException() {
         return new KojisPawnException(
                 "That command was never part of the plan. "
-                        + "Try todo, deadline, event, list, mark, unmark, delete, on, or bye.");
+                        + "Try todo, deadline, event, list, mark, unmark, delete, on, find, or bye.");
     }
 }

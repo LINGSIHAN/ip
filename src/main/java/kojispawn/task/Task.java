@@ -60,6 +60,16 @@ public abstract class Task {
         return false;
     }
 
+    /**
+     * Reports whether the task description contains the given keyword.
+     *
+     * @param keyword Keyword to find.
+     * @return {@code true} if the description contains the keyword.
+     */
+    public boolean matches(String keyword) {
+        return description.contains(keyword);
+    }
+
     @Override
     public String toString() {
         return "[" + getStatusIcon() + "] " + description;

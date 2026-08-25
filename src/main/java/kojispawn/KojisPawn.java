@@ -96,6 +96,9 @@ public class KojisPawn {
             case ON:
                 ui.showTasksOnDate(tasks.findOn(command.getDate()), command.getDate());
                 break;
+            case FIND:
+                ui.showMatchingTasks(tasks.find(command.getKeyword()));
+                break;
             case BYE:
                 return false;
             case UNKNOWN:

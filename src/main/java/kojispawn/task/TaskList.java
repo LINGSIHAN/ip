@@ -69,6 +69,18 @@ public class TaskList {
     }
 
     /**
+     * Finds tasks whose descriptions contain the given keyword.
+     *
+     * @param keyword Keyword to find.
+     * @return Matching tasks in their original order.
+     */
+    public List<Task> find(String keyword) {
+        return tasks.stream()
+                .filter(task -> task.matches(keyword))
+                .toList();
+    }
+
+    /**
      * Marks the selected task as complete.
      *
      * @param taskNumber One-based task number.

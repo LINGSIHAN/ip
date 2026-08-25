@@ -20,6 +20,7 @@ public class CommandTypeTest {
         assertEquals(CommandType.UNMARK, CommandType.fromCommand("unmark 1"));
         assertEquals(CommandType.DELETE, CommandType.fromCommand("delete 1"));
         assertEquals(CommandType.ON, CommandType.fromCommand("on 2019-12-02"));
+        assertEquals(CommandType.FIND, CommandType.fromCommand("find book"));
         assertEquals(CommandType.BYE, CommandType.fromCommand("bye"));
     }
 

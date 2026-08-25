@@ -12,6 +12,7 @@ public class Command {
     private final Task task;
     private final Integer taskNumber;
     private final LocalDate date;
+    private final String keyword;
 
     /**
      * Creates a command with any task data required for its execution.
@@ -21,7 +22,17 @@ public class Command {
      * @param taskNumber One-based task number, or {@code null} when none is required.
      */
     public Command(CommandType type, Task task, Integer taskNumber) {
-        this(type, task, taskNumber, null);
+        this(type, task, taskNumber, null, null);
+    }
+
+    /**
+     * Creates a command that carries a keyword for a task search.
+     *
+     * @param type Type of command.
+     * @param keyword Keyword to find in task descriptions.
+     */
+    public Command(CommandType type, String keyword) {
+        this(type, null, null, null, keyword);
     }
 
     /**
@@ -33,10 +44,16 @@ public class Command {
      * @param date Date to query, or {@code null} when none is required.
      */
     public Command(CommandType type, Task task, Integer taskNumber, LocalDate date) {
+        this(type, task, taskNumber, date, null);
+    }
+
+    private Command(CommandType type, Task task, Integer taskNumber, LocalDate date,
+            String keyword) {
         this.type = type;
         this.task = task;
         this.taskNumber = taskNumber;
         this.date = date;
+        this.keyword = keyword;
     }
 
     public CommandType getType() {
@@ -53,5 +70,9 @@ public class Command {
 
     public LocalDate getDate() {
         return date;
+    }
+
+    public String getKeyword() {
+        return keyword;
     }
 }
