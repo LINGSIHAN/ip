@@ -1,4 +1,14 @@
+package kojispawn;
+
 import java.nio.file.Path;
+
+import kojispawn.command.Command;
+import kojispawn.command.Parser;
+import kojispawn.exception.KojisPawnException;
+import kojispawn.storage.Storage;
+import kojispawn.task.Task;
+import kojispawn.task.TaskList;
+import kojispawn.ui.Ui;
 
 /**
  * Coordinates input parsing, task management, and user interaction.

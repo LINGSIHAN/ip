@@ -1,3 +1,5 @@
+package kojispawn.task;
+
 import java.time.LocalDate;
 
 /**

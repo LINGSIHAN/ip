@@ -1,3 +1,5 @@
+package kojispawn.task;
+
 /**
  * Represents a task that takes place between specified start and end times.
  */
