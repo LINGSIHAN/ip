@@ -9,6 +9,7 @@ public enum CommandType {
     MARK,
     UNMARK,
     DELETE,
+    ON,
     BYE,
     UNKNOWN;
 
@@ -34,6 +35,7 @@ public enum CommandType {
         case "mark" -> MARK;
         case "unmark" -> UNMARK;
         case "delete" -> DELETE;
+        case "on" -> ON;
         case "bye" -> BYE;
         default -> UNKNOWN;
         };

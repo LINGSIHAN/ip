@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.time.LocalDate;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public class Storage {
         String[] fields = taskLine.split(" \\| ", -1);
         Task task = switch (fields[0]) {
         case "T" -> new Todo(fields[2]);
-        case "D" -> new Deadline(fields[2], fields[3]);
+        case "D" -> new Deadline(fields[2], LocalDate.parse(fields[3]));
         case "E" -> new Event(fields[2], fields[3], fields[4]);
         default -> throw new IllegalArgumentException("Unknown stored task type: " + fields[0]);
         };

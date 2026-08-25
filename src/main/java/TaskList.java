@@ -1,3 +1,4 @@
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,6 +42,18 @@ public class TaskList {
 
     public int size() {
         return tasks.size();
+    }
+
+    /**
+     * Finds tasks that occur on the given date.
+     *
+     * @param date date to search for
+     * @return matching tasks in their original order
+     */
+    public List<Task> findOn(LocalDate date) {
+        return tasks.stream()
+                .filter(task -> task.occursOn(date))
+                .toList();
     }
 
     /**
