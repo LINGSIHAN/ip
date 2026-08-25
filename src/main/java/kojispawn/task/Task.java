@@ -9,6 +9,11 @@ public abstract class Task {
     protected String description;
     protected boolean isDone;
 
+    /**
+     * Creates an incomplete task with the given description.
+     *
+     * @param description Description of the task.
+     */
     public Task(String description) {
         this.description = description;
         this.isDone = false;
@@ -17,7 +22,7 @@ public abstract class Task {
     /**
      * Returns the icon representing the task's completion status.
      *
-     * @return {@code X} when complete, or a space when incomplete
+     * @return {@code X} when complete, or a space when incomplete.
      */
     public String getStatusIcon() {
         return isDone ? "X" : " ";
@@ -40,7 +45,7 @@ public abstract class Task {
     /**
      * Converts this task into the stable format used in the data file.
      *
-     * @return serialized task data
+     * @return Serialized task data.
      */
     public abstract String toDataString();
 
@@ -48,8 +53,8 @@ public abstract class Task {
      * Reports whether this task occurs on a given date.
      * Tasks without a structured date do not occur on any queryable date.
      *
-     * @param date date to check
-     * @return {@code true} if the task occurs on the date
+     * @param date Date to check.
+     * @return {@code true} if the task occurs on the date.
      */
     public boolean occursOn(LocalDate date) {
         return false;

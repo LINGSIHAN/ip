@@ -9,23 +9,23 @@ import org.junit.jupiter.api.Test;
  */
 public class CommandTypeTest {
     @Test
-    public void from_allSupportedCommandWords_returnsMatchingTypes() {
-        assertEquals(CommandType.TODO, CommandType.from("todo read book"));
+    public void fromCommand_allSupportedCommandWords_returnsMatchingTypes() {
+        assertEquals(CommandType.TODO, CommandType.fromCommand("todo read book"));
         assertEquals(CommandType.DEADLINE,
-                CommandType.from("deadline return book /by 2019-12-02"));
+                CommandType.fromCommand("deadline return book /by 2019-12-02"));
         assertEquals(CommandType.EVENT,
-                CommandType.from("event meeting /from 2pm /to 4pm"));
-        assertEquals(CommandType.LIST, CommandType.from("list"));
-        assertEquals(CommandType.MARK, CommandType.from("mark 1"));
-        assertEquals(CommandType.UNMARK, CommandType.from("unmark 1"));
-        assertEquals(CommandType.DELETE, CommandType.from("delete 1"));
-        assertEquals(CommandType.ON, CommandType.from("on 2019-12-02"));
-        assertEquals(CommandType.BYE, CommandType.from("bye"));
+                CommandType.fromCommand("event meeting /from 2pm /to 4pm"));
+        assertEquals(CommandType.LIST, CommandType.fromCommand("list"));
+        assertEquals(CommandType.MARK, CommandType.fromCommand("mark 1"));
+        assertEquals(CommandType.UNMARK, CommandType.fromCommand("unmark 1"));
+        assertEquals(CommandType.DELETE, CommandType.fromCommand("delete 1"));
+        assertEquals(CommandType.ON, CommandType.fromCommand("on 2019-12-02"));
+        assertEquals(CommandType.BYE, CommandType.fromCommand("bye"));
     }
 
     @Test
-    public void from_unrecognizedOrPartialWord_returnsUnknown() {
-        assertEquals(CommandType.UNKNOWN, CommandType.from("todoodle"));
-        assertEquals(CommandType.UNKNOWN, CommandType.from(""));
+    public void fromCommand_unrecognizedOrPartialWord_returnsUnknown() {
+        assertEquals(CommandType.UNKNOWN, CommandType.fromCommand("todoodle"));
+        assertEquals(CommandType.UNKNOWN, CommandType.fromCommand(""));
     }
 }

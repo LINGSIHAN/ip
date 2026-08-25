@@ -7,7 +7,7 @@ public class KojisPawnException extends Exception {
     /**
      * Creates an exception containing an explanation suitable for the user.
      *
-     * @param message explanation of the invalid command
+     * @param message Explanation of the invalid command.
      */
     public KojisPawnException(String message) {
         super(message);

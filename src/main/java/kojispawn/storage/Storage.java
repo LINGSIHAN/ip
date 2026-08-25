@@ -1,9 +1,9 @@
 package kojispawn.storage;
 
 import java.io.IOException;
-import java.time.LocalDate;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +15,7 @@ import kojispawn.task.TaskList;
 import kojispawn.task.Todo;
 
 /**
- * Saves tasks to a file so they can be restored in a later increment.
+ * Saves tasks to and loads tasks from a data file.
  */
 public class Storage {
     private final Path filePath;
@@ -23,7 +23,7 @@ public class Storage {
     /**
      * Creates storage that writes to the given file.
      *
-     * @param filePath relative path of the task data file
+     * @param filePath Relative path of the task data file.
      */
     public Storage(Path filePath) {
         this.filePath = filePath;
@@ -32,8 +32,8 @@ public class Storage {
     /**
      * Loads tasks from the data file, preserving their types and completion states.
      *
-     * @return tasks stored in the file, or an empty list when the file does not exist
-     * @throws KojisPawnException if the file cannot be read
+     * @return Tasks stored in the file, or an empty list when the file does not exist.
+     * @throws KojisPawnException If the file cannot be read.
      */
     public List<Task> load() throws KojisPawnException {
         if (!Files.exists(filePath)) {
@@ -56,8 +56,8 @@ public class Storage {
     /**
      * Writes the complete task list to disk, replacing the previous contents.
      *
-     * @param tasks tasks to save
-     * @throws KojisPawnException if the directory or file cannot be written
+     * @param tasks Tasks to save.
+     * @throws KojisPawnException If the directory or file cannot be written.
      */
     public void save(TaskList tasks) throws KojisPawnException {
         try {
@@ -81,10 +81,10 @@ public class Storage {
     private Task parseTask(String taskLine) {
         String[] fields = taskLine.split(" \\| ", -1);
         Task task = switch (fields[0]) {
-        case "T" -> new Todo(fields[2]);
-        case "D" -> new Deadline(fields[2], LocalDate.parse(fields[3]));
-        case "E" -> new Event(fields[2], fields[3], fields[4]);
-        default -> throw new IllegalArgumentException("Unknown stored task type: " + fields[0]);
+            case "T" -> new Todo(fields[2]);
+            case "D" -> new Deadline(fields[2], LocalDate.parse(fields[3]));
+            case "E" -> new Event(fields[2], fields[3], fields[4]);
+            default -> throw new IllegalArgumentException("Unknown stored task type: " + fields[0]);
         };
 
         if (fields[1].equals("1")) {

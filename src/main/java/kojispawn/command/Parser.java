@@ -16,24 +16,24 @@ public class Parser {
     /**
      * Parses one line of user input.
      *
-     * @param input command entered by the user
-     * @return validated command ready for execution
-     * @throws KojisPawnException if the command or its arguments are invalid
+     * @param input Command entered by the user.
+     * @return Validated command ready for execution.
+     * @throws KojisPawnException If the command or its arguments are invalid.
      */
     public Command parse(String input) throws KojisPawnException {
         String command = input.strip();
-        CommandType type = CommandType.from(command);
+        CommandType type = CommandType.fromCommand(command);
 
         return switch (type) {
-        case TODO -> new Command(type, parseTodo(command), null);
-        case DEADLINE -> new Command(type, parseDeadline(command), null);
-        case EVENT -> new Command(type, parseEvent(command), null);
-        case MARK -> new Command(type, null, parseTaskNumber(command, "mark"));
-        case UNMARK -> new Command(type, null, parseTaskNumber(command, "unmark"));
-        case DELETE -> new Command(type, null, parseTaskNumber(command, "delete"));
-        case ON -> parseOn(command, type);
-        case LIST, BYE -> parseExactCommand(command, type);
-        case UNKNOWN -> throw createUnknownCommandException();
+            case TODO -> new Command(type, parseTodo(command), null);
+            case DEADLINE -> new Command(type, parseDeadline(command), null);
+            case EVENT -> new Command(type, parseEvent(command), null);
+            case MARK -> new Command(type, null, parseTaskNumber(command, "mark"));
+            case UNMARK -> new Command(type, null, parseTaskNumber(command, "unmark"));
+            case DELETE -> new Command(type, null, parseTaskNumber(command, "delete"));
+            case ON -> parseOn(command, type);
+            case LIST, BYE -> parseExactCommand(command, type);
+            case UNKNOWN -> throw createUnknownCommandException();
         };
     }
 

@@ -13,6 +13,9 @@ import kojispawn.exception.KojisPawnException;
 public class TaskList {
     private final List<Task> tasks;
 
+    /**
+     * Creates an empty task list.
+     */
     public TaskList() {
         this.tasks = new ArrayList<>();
     }
@@ -20,7 +23,7 @@ public class TaskList {
     /**
      * Creates a task list containing tasks loaded from storage.
      *
-     * @param tasks tasks to place in the list
+     * @param tasks Tasks to place in the list.
      */
     public TaskList(List<Task> tasks) {
         this.tasks = new ArrayList<>(tasks);
@@ -29,7 +32,7 @@ public class TaskList {
     /**
      * Adds a task to the end of the list.
      *
-     * @param task task to add
+     * @param task Task to add.
      */
     public void add(Task task) {
         tasks.add(task);
@@ -38,12 +41,17 @@ public class TaskList {
     /**
      * Returns a read-only view for displaying the tasks.
      *
-     * @return tasks in their current order
+     * @return Tasks in their current order.
      */
     public List<Task> getTasks() {
         return Collections.unmodifiableList(tasks);
     }
 
+    /**
+     * Returns the number of tasks in the list.
+     *
+     * @return Number of tasks in the list.
+     */
     public int size() {
         return tasks.size();
     }
@@ -51,8 +59,8 @@ public class TaskList {
     /**
      * Finds tasks that occur on the given date.
      *
-     * @param date date to search for
-     * @return matching tasks in their original order
+     * @param date Date to search for.
+     * @return Matching tasks in their original order.
      */
     public List<Task> findOn(LocalDate date) {
         return tasks.stream()
@@ -63,9 +71,9 @@ public class TaskList {
     /**
      * Marks the selected task as complete.
      *
-     * @param taskNumber one-based task number
-     * @return task whose status changed
-     * @throws KojisPawnException if the task number is outside the list
+     * @param taskNumber One-based task number.
+     * @return Task whose status changed.
+     * @throws KojisPawnException If the task number is outside the list.
      */
     public Task mark(int taskNumber) throws KojisPawnException {
         Task task = getTask(taskNumber, "mark");
@@ -76,9 +84,9 @@ public class TaskList {
     /**
      * Marks the selected task as incomplete.
      *
-     * @param taskNumber one-based task number
-     * @return task whose status changed
-     * @throws KojisPawnException if the task number is outside the list
+     * @param taskNumber One-based task number.
+     * @return Task whose status changed.
+     * @throws KojisPawnException If the task number is outside the list.
      */
     public Task unmark(int taskNumber) throws KojisPawnException {
         Task task = getTask(taskNumber, "unmark");
@@ -89,9 +97,9 @@ public class TaskList {
     /**
      * Removes the selected task.
      *
-     * @param taskNumber one-based task number
-     * @return removed task
-     * @throws KojisPawnException if the task number is outside the list
+     * @param taskNumber One-based task number.
+     * @return Removed task.
+     * @throws KojisPawnException If the task number is outside the list.
      */
     public Task delete(int taskNumber) throws KojisPawnException {
         validateTaskNumber(taskNumber, "delete");
