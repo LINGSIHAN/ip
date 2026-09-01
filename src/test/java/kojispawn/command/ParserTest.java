@@ -74,8 +74,8 @@ public class ParserTest {
 
     @Test
     public void parse_impossibleDeadlineDate_throwsException() {
-        KojisPawnException exception = assertThrows(KojisPawnException.class,
-                () -> parser.parse("deadline return book /by 2019-02-30"));
+        KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                parser.parse("deadline return book /by 2019-02-30"));
 
         assertEquals("Deadline dates must use yyyy-MM-dd and describe a real calendar date.",
                 exception.getMessage());
@@ -98,8 +98,8 @@ public class ParserTest {
 
     @Test
     public void parse_findWithoutKeyword_throwsException() {
-        KojisPawnException exception = assertThrows(KojisPawnException.class,
-                () -> parser.parse("find"));
+        KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                parser.parse("find"));
 
         assertEquals("Specify a keyword. Use: find KEYWORD.", exception.getMessage());
     }
