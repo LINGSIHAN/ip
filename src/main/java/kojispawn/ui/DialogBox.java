@@ -1,7 +1,12 @@
 package kojispawn.ui;
 
+import java.io.IOException;
+import java.util.Collections;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -13,8 +18,10 @@ import javafx.scene.layout.HBox;
  * Displays one Koji's Pawn message together with its sender's image.
  */
 public class DialogBox extends HBox {
-    private final Label text;
-    private final ImageView displayPicture;
+    @FXML
+    private Label dialog;
+    @FXML
+    private ImageView displayPicture;
 
     /**
      * Creates a dialog box containing the supplied message and image.
@@ -22,16 +29,18 @@ public class DialogBox extends HBox {
      * @param message Message to display.
      * @param image Image representing the sender.
      */
-    public DialogBox(String message, Image image) {
-        text = new Label(message);
-        displayPicture = new ImageView(image);
+    private DialogBox(String message, Image image) {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
+        fxmlLoader.setController(this);
+        fxmlLoader.setRoot(this);
+        try {
+            fxmlLoader.load();
+        } catch (IOException exception) {
+            throw new IllegalStateException("Unable to load the dialog box layout.", exception);
+        }
 
-        text.setWrapText(true);
-        displayPicture.setFitWidth(100.0);
-        displayPicture.setFitHeight(100.0);
-        setAlignment(Pos.TOP_RIGHT);
-
-        getChildren().addAll(text, displayPicture);
+        dialog.setText(message);
+        displayPicture.setImage(image);
     }
 
     /**
@@ -64,7 +73,7 @@ public class DialogBox extends HBox {
     private void flip() {
         setAlignment(Pos.TOP_LEFT);
         ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
-        FXCollections.reverse(children);
+        Collections.reverse(children);
         getChildren().setAll(children);
     }
 }
