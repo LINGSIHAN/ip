@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import kojispawn.command.CommandType;
 
 /**
  * Displays one Koji's Pawn message together with its sender's image.
@@ -59,11 +60,13 @@ public class DialogBox extends HBox {
      *
      * @param message Koji's Pawn response.
      * @param image Image representing Koji's Pawn.
+     * @param commandType Type of command that generated the response.
      * @return Dialog box for the Koji's Pawn response.
      */
-    public static DialogBox getKojiDialog(String message, Image image) {
+    public static DialogBox getKojiDialog(String message, Image image, CommandType commandType) {
         DialogBox dialogBox = new DialogBox(message, image);
         dialogBox.flip();
+        dialogBox.changeDialogStyle(commandType);
         return dialogBox;
     }
 
@@ -75,5 +78,19 @@ public class DialogBox extends HBox {
         ObservableList<Node> children = FXCollections.observableArrayList(getChildren());
         Collections.reverse(children);
         getChildren().setAll(children);
+        dialog.getStyleClass().add("reply-label");
+    }
+
+    private void changeDialogStyle(CommandType commandType) {
+        String styleClass = switch (commandType) {
+            case TODO, DEADLINE, EVENT -> "add-label";
+            case MARK, UNMARK -> "marked-label";
+            case DELETE -> "delete-label";
+            case UNKNOWN -> "error-label";
+            default -> null;
+        };
+        if (styleClass != null) {
+            dialog.getStyleClass().add(styleClass);
+        }
     }
 }

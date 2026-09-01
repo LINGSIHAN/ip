@@ -52,9 +52,7 @@ public class Ui {
      * Shows the farewell message.
      */
     public void showExit() {
-        System.out.print(LINE
-                + "Leaving already? How predictable. Your return was already part of the plan.\n"
-                + LINE);
+        showResponse(getExitMessage());
     }
 
     /**
@@ -63,8 +61,19 @@ public class Ui {
      * @param message Error message to show.
      */
     public void showError(String message) {
+        showResponse(message);
+    }
+
+    /**
+     * Shows a chatbot response between separator lines.
+     *
+     * @param message Response to show, which may contain multiple lines.
+     */
+    public void showResponse(String message) {
         System.out.print(LINE);
-        System.out.println(message);
+        if (!message.isEmpty()) {
+            System.out.println(message);
+        }
         System.out.print(LINE);
     }
 
@@ -74,11 +83,7 @@ public class Ui {
      * @param tasks Tasks to show.
      */
     public void showTaskList(List<Task> tasks) {
-        System.out.print(LINE);
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + "." + tasks.get(i));
-        }
-        System.out.print(LINE);
+        showResponse(formatTaskList(tasks));
     }
 
     /**
@@ -88,16 +93,31 @@ public class Ui {
      * @param date Queried date.
      */
     public void showTasksOnDate(List<Task> tasks, LocalDate date) {
-        System.out.print(LINE);
+        showResponse(formatTasksOnDate(tasks, date));
+    }
+
+    /**
+     * Formats all tasks in their current order.
+     *
+     * @param tasks Tasks to format.
+     * @return Numbered task list, or an empty string when there are no tasks.
+     */
+    public String formatTaskList(List<Task> tasks) {
+        return formatNumberedTasks(tasks);
+    }
+
+    /**
+     * Formats tasks occurring on a requested date.
+     *
+     * @param tasks Tasks matching the date.
+     * @param date Queried date.
+     * @return Response describing the matching tasks.
+     */
+    public String formatTasksOnDate(List<Task> tasks, LocalDate date) {
         if (tasks.isEmpty()) {
-            System.out.println("No dated tasks occur on " + date + ".");
-        } else {
-            System.out.println("Dated tasks occurring on " + date + ":");
-            for (int i = 0; i < tasks.size(); i++) {
-                System.out.println((i + 1) + "." + tasks.get(i));
-            }
+            return "No dated tasks occur on " + date + ".";
         }
-        System.out.print(LINE);
+        return "Dated tasks occurring on " + date + ":\n" + formatNumberedTasks(tasks);
     }
 
     /**
@@ -106,12 +126,19 @@ public class Ui {
      * @param tasks Matching tasks.
      */
     public void showMatchingTasks(List<Task> tasks) {
-        System.out.print(LINE);
-        System.out.println("Here are the matching tasks in your list:");
-        for (int i = 0; i < tasks.size(); i++) {
-            System.out.println((i + 1) + "." + tasks.get(i));
-        }
-        System.out.print(LINE);
+        showResponse(formatMatchingTasks(tasks));
+    }
+
+    /**
+     * Formats tasks whose descriptions match a search keyword.
+     *
+     * @param tasks Matching tasks.
+     * @return Response containing the matching tasks.
+     */
+    public String formatMatchingTasks(List<Task> tasks) {
+        String heading = "Here are the matching tasks in your list:";
+        String numberedTasks = formatNumberedTasks(tasks);
+        return numberedTasks.isEmpty() ? heading : heading + "\n" + numberedTasks;
     }
 
     /**
@@ -121,11 +148,20 @@ public class Ui {
      * @param taskCount Updated number of tasks.
      */
     public void showTaskAdded(Task task, int taskCount) {
-        System.out.print(LINE);
-        System.out.println("Got it. I've added this task:");
-        System.out.println("  " + task);
-        showTaskCount(taskCount);
-        System.out.print(LINE);
+        showResponse(formatTaskAdded(task, taskCount));
+    }
+
+    /**
+     * Formats the response for a newly added task.
+     *
+     * @param task Task that was added.
+     * @param taskCount Updated number of tasks.
+     * @return Task-added response.
+     */
+    public String formatTaskAdded(Task task, int taskCount) {
+        return "Got it. I've added this task:\n"
+                + "  " + task + "\n"
+                + formatTaskCount(taskCount);
     }
 
     /**
@@ -134,10 +170,17 @@ public class Ui {
      * @param task Task that was marked.
      */
     public void showTaskMarked(Task task) {
-        System.out.print(LINE);
-        System.out.println("Another variable falls into place. This task is now complete:");
-        System.out.println("  " + task);
-        System.out.print(LINE);
+        showResponse(formatTaskMarked(task));
+    }
+
+    /**
+     * Formats the response for a completed task.
+     *
+     * @param task Task that was marked.
+     * @return Task-marked response.
+     */
+    public String formatTaskMarked(Task task) {
+        return "Another variable falls into place. This task is now complete:\n  " + task;
     }
 
     /**
@@ -146,10 +189,17 @@ public class Ui {
      * @param task Task that was unmarked.
      */
     public void showTaskUnmarked(Task task) {
-        System.out.print(LINE);
-        System.out.println("Even regression has its purpose. This task is incomplete once more:");
-        System.out.println("  " + task);
-        System.out.print(LINE);
+        showResponse(formatTaskUnmarked(task));
+    }
+
+    /**
+     * Formats the response for a task returned to an incomplete state.
+     *
+     * @param task Task that was unmarked.
+     * @return Task-unmarked response.
+     */
+    public String formatTaskUnmarked(Task task) {
+        return "Even regression has its purpose. This task is incomplete once more:\n  " + task;
     }
 
     /**
@@ -159,11 +209,29 @@ public class Ui {
      * @param taskCount Updated number of tasks.
      */
     public void showTaskDeleted(Task task, int taskCount) {
-        System.out.print(LINE);
-        System.out.println("A disposable piece has left the board. This task has been removed:");
-        System.out.println("  " + task);
-        showTaskCount(taskCount);
-        System.out.print(LINE);
+        showResponse(formatTaskDeleted(task, taskCount));
+    }
+
+    /**
+     * Formats the response for a deleted task.
+     *
+     * @param task Task that was deleted.
+     * @param taskCount Updated number of tasks.
+     * @return Task-deleted response.
+     */
+    public String formatTaskDeleted(Task task, int taskCount) {
+        return "A disposable piece has left the board. This task has been removed:\n"
+                + "  " + task + "\n"
+                + formatTaskCount(taskCount);
+    }
+
+    /**
+     * Returns Koji's Pawn's farewell message.
+     *
+     * @return Farewell response.
+     */
+    public String getExitMessage() {
+        return "Leaving already? How predictable. Your return was already part of the plan.";
     }
 
     /**
@@ -173,8 +241,19 @@ public class Ui {
         scanner.close();
     }
 
-    private void showTaskCount(int taskCount) {
+    private String formatTaskCount(int taskCount) {
         String taskWord = taskCount == 1 ? "task" : "tasks";
-        System.out.println("Now you have " + taskCount + " " + taskWord + " in the list.");
+        return "Now you have " + taskCount + " " + taskWord + " in the list.";
+    }
+
+    private String formatNumberedTasks(List<Task> tasks) {
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < tasks.size(); i++) {
+            if (i > 0) {
+                result.append('\n');
+            }
+            result.append(i + 1).append('.').append(tasks.get(i));
+        }
+        return result.toString();
     }
 }

@@ -1,5 +1,7 @@
 package kojispawn.ui;
 
+import javafx.animation.PauseTransition;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -7,7 +9,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.util.Duration;
 import kojispawn.KojisPawn;
+import kojispawn.command.CommandType;
 
 /**
  * Controls the main Koji's Pawn chat window defined in FXML.
@@ -51,9 +55,16 @@ public class MainWindow extends AnchorPane {
     private void handleUserInput() {
         String userText = userInput.getText();
         String kojiText = koji.getResponse(userText);
+        CommandType commandType = koji.getLastCommandType();
         dialogContainer.getChildren().addAll(
                 DialogBox.getUserDialog(userText, userImage),
-                DialogBox.getKojiDialog(kojiText, kojiImage));
+                DialogBox.getKojiDialog(kojiText, kojiImage, commandType));
         userInput.clear();
+
+        if (koji.isExitRequested()) {
+            PauseTransition exitDelay = new PauseTransition(Duration.seconds(1.0));
+            exitDelay.setOnFinished(event -> Platform.exit());
+            exitDelay.play();
+        }
     }
 }
