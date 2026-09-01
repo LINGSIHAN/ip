@@ -23,8 +23,8 @@ public class TaskListTest {
         source.clear();
 
         assertEquals(1, taskList.size());
-        assertThrows(UnsupportedOperationException.class,
-                () -> taskList.getTasks().add(new Todo("write book")));
+        assertThrows(UnsupportedOperationException.class, () ->
+                taskList.getTasks().add(new Todo("write book")));
     }
 
     @Test
@@ -98,8 +98,8 @@ public class TaskListTest {
     public void mark_emptyList_throwsException() {
         TaskList taskList = new TaskList();
 
-        KojisPawnException exception = assertThrows(KojisPawnException.class,
-                () -> taskList.mark(1));
+        KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                taskList.mark(1));
 
         assertEquals("There are no tasks to mark yet.", exception.getMessage());
     }
@@ -108,8 +108,8 @@ public class TaskListTest {
     public void delete_taskNumberAboveSize_throwsException() {
         TaskList taskList = new TaskList(List.of(new Todo("only task")));
 
-        KojisPawnException exception = assertThrows(KojisPawnException.class,
-                () -> taskList.delete(2));
+        KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                taskList.delete(2));
 
         assertEquals("No task occupies that position. Choose a number from 1 to 1.",
                 exception.getMessage());

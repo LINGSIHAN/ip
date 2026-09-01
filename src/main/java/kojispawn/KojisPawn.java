@@ -103,6 +103,8 @@ public class KojisPawn {
                 return false;
             case UNKNOWN:
                 throw new AssertionError("Parser returned an unknown command");
+            default:
+                throw new AssertionError("Unhandled command type: " + command.getType());
         }
         return true;
     }
