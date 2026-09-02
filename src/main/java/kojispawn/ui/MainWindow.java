@@ -49,7 +49,7 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Adds the user's message and Koji's echo response, then clears the text field.
+     * Adds the user's message and Koji's echo, then clears the text field.
      */
     @FXML
     private void handleUserInput() {

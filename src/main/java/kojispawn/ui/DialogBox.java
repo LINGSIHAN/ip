@@ -81,6 +81,14 @@ public class DialogBox extends HBox {
         dialog.getStyleClass().add("reply-label");
     }
 
+    /**
+     * Adds a response-specific CSS class based on the command result.
+     * Commands without a special style retain the default reply appearance.
+     * UNKNOWN represents an unsuccessful command and receives error styling.
+     *
+     * @param commandType Type of the processed command.
+     */
+
     private void changeDialogStyle(CommandType commandType) {
         String styleClass = switch (commandType) {
             case TODO, DEADLINE, EVENT -> "add-label";

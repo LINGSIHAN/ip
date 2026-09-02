@@ -9,24 +9,24 @@ import org.junit.jupiter.api.Test;
  */
 public class CommandTypeTest {
     @Test
-    public void fromCommand_allSupportedCommandWords_returnsMatchingTypes() {
-        assertEquals(CommandType.TODO, CommandType.fromCommand("todo read book"));
+    public void getCommandTypeFromString_allSupportedCommandWords_returnsMatchingTypes() {
+        assertEquals(CommandType.TODO, CommandType.getCommandTypeFromString("todo read book"));
         assertEquals(CommandType.DEADLINE,
-                CommandType.fromCommand("deadline return book /by 2019-12-02"));
+                CommandType.getCommandTypeFromString("deadline return book /by 2019-12-02"));
         assertEquals(CommandType.EVENT,
-                CommandType.fromCommand("event meeting /from 2pm /to 4pm"));
-        assertEquals(CommandType.LIST, CommandType.fromCommand("list"));
-        assertEquals(CommandType.MARK, CommandType.fromCommand("mark 1"));
-        assertEquals(CommandType.UNMARK, CommandType.fromCommand("unmark 1"));
-        assertEquals(CommandType.DELETE, CommandType.fromCommand("delete 1"));
-        assertEquals(CommandType.ON, CommandType.fromCommand("on 2019-12-02"));
-        assertEquals(CommandType.FIND, CommandType.fromCommand("find book"));
-        assertEquals(CommandType.BYE, CommandType.fromCommand("bye"));
+                CommandType.getCommandTypeFromString("event meeting /from 2pm /to 4pm"));
+        assertEquals(CommandType.LIST, CommandType.getCommandTypeFromString("list"));
+        assertEquals(CommandType.MARK, CommandType.getCommandTypeFromString("mark 1"));
+        assertEquals(CommandType.UNMARK, CommandType.getCommandTypeFromString("unmark 1"));
+        assertEquals(CommandType.DELETE, CommandType.getCommandTypeFromString("delete 1"));
+        assertEquals(CommandType.ON, CommandType.getCommandTypeFromString("on 2019-12-02"));
+        assertEquals(CommandType.FIND, CommandType.getCommandTypeFromString("find book"));
+        assertEquals(CommandType.BYE, CommandType.getCommandTypeFromString("bye"));
     }
 
     @Test
-    public void fromCommand_unrecognizedOrPartialWord_returnsUnknown() {
-        assertEquals(CommandType.UNKNOWN, CommandType.fromCommand("todoodle"));
-        assertEquals(CommandType.UNKNOWN, CommandType.fromCommand(""));
+    public void getCommandTypeFromString_unrecognizedOrPartialWord_returnsUnknown() {
+        assertEquals(CommandType.UNKNOWN, CommandType.getCommandTypeFromString("todoodle"));
+        assertEquals(CommandType.UNKNOWN, CommandType.getCommandTypeFromString(""));
     }
 }

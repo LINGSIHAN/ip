@@ -22,7 +22,7 @@ public enum CommandType {
      * @param command Normalized command entered by the user.
      * @return Matching command type, or {@link #UNKNOWN} if the word is not recognized.
      */
-    public static CommandType fromCommand(String command) {
+    public static CommandType getCommandTypeFromString(String command) {
         int commandWordEnd = 0;
         while (commandWordEnd < command.length()
                 && !Character.isWhitespace(command.charAt(commandWordEnd))) {

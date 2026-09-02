@@ -10,31 +10,31 @@ import java.util.Locale;
 public class Deadline extends Task {
     private static final DateTimeFormatter DISPLAY_FORMAT =
             DateTimeFormatter.ofPattern("MMM d yyyy", Locale.ENGLISH);
-    private final LocalDate by;
+    private final LocalDate dateBy;
 
     /**
      * Creates an incomplete deadline.
      *
      * @param description Description of the deadline task.
-     * @param by Date by which the task should be completed.
+     * @param dateBy Date by which the task should be completed.
      */
-    public Deadline(String description, LocalDate by) {
+    public Deadline(String description, LocalDate dateBy) {
         super(description);
-        this.by = by;
+        this.dateBy = dateBy;
     }
 
     @Override
     public String toDataString() {
-        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + by;
+        return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + dateBy;
     }
 
     @Override
     public boolean occursOn(LocalDate date) {
-        return by.equals(date);
+        return dateBy.equals(date);
     }
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " (by: " + by.format(DISPLAY_FORMAT) + ")";
+        return "[D]" + super.toString() + " (by: " + dateBy.format(DISPLAY_FORMAT) + ")";
     }
 }

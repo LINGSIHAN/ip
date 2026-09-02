@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 import kojispawn.exception.KojisPawnException;
+
 /**
  * Converts raw user input into validated commands.
  */
@@ -19,7 +20,7 @@ public class Parser {
      */
     public Command parse(String input) throws KojisPawnException {
         String command = input.strip();
-        CommandType type = CommandType.fromCommand(command);
+        CommandType type = CommandType.getCommandTypeFromString(command);
 
         return switch (type) {
             case TODO -> new Command(type, taskParser.parseTodo(command), null);
@@ -28,7 +29,7 @@ public class Parser {
             case MARK -> new Command(type, null, parseTaskNumber(command, "mark"));
             case UNMARK -> new Command(type, null, parseTaskNumber(command, "unmark"));
             case DELETE -> new Command(type, null, parseTaskNumber(command, "delete"));
-            case ON -> parseOn(command, type);
+            case ON -> parseOnCommand(command, type);
             case FIND -> parseFind(command, type);
             case LIST, BYE -> parseExactCommand(command, type);
             case UNKNOWN -> throw createUnknownCommandException();
@@ -55,7 +56,7 @@ public class Parser {
         return taskNumber;
     }
 
-    private Command parseOn(String command, CommandType type) throws KojisPawnException {
+    private Command parseOnCommand(String command, CommandType type) throws KojisPawnException {
         String dateText = command.substring("on".length()).strip();
         if (dateText.isBlank()) {
             throw new KojisPawnException("Specify a date. Use: on yyyy-MM-dd.");

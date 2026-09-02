@@ -56,16 +56,16 @@ final class TaskParser {
                     "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
         }
 
-        String by = deadlineDetails.substring(byIndex + byMarker.length());
-        if (by.isBlank()) {
+        String dateBy = deadlineDetails.substring(byIndex + byMarker.length());
+        if (dateBy.isBlank()) {
             throw new KojisPawnException("The plan requires a deadline value after /by.");
         }
-        if (!Character.isWhitespace(by.charAt(0))) {
+        if (!Character.isWhitespace(dateBy.charAt(0))) {
             throw new KojisPawnException(
                     "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
         }
         try {
-            return new Deadline(description, LocalDate.parse(by.strip()));
+            return new Deadline(description, LocalDate.parse(dateBy.strip()));
         } catch (DateTimeParseException exception) {
             throw new KojisPawnException(
                     "Deadline dates must use yyyy-MM-dd and describe a real calendar date.");
@@ -110,21 +110,21 @@ final class TaskParser {
                             + "Use: event DESCRIPTION /from START /to END.");
         }
 
-        String from = eventDetails.substring(fromIndex + fromMarker.length(), toIndex);
-        if (from.isBlank()) {
+        String dateFrom = eventDetails.substring(fromIndex + fromMarker.length(), toIndex);
+        if (dateFrom.isBlank()) {
             throw new KojisPawnException("The plan requires a starting value after /from.");
         }
-        if (!Character.isWhitespace(from.charAt(0))) {
+        if (!Character.isWhitespace(dateFrom.charAt(0))) {
             throw new KojisPawnException("Every event has an origin. Include /from START.");
         }
 
-        String to = eventDetails.substring(toIndex + toMarker.length());
-        if (to.isBlank()) {
+        String dateTo = eventDetails.substring(toIndex + toMarker.length());
+        if (dateTo.isBlank()) {
             throw new KojisPawnException("The plan requires an ending value after /to.");
         }
-        if (!Character.isWhitespace(to.charAt(0))) {
+        if (!Character.isWhitespace(dateTo.charAt(0))) {
             throw new KojisPawnException("Even calculated events need an endpoint. Include /to END.");
         }
-        return new Event(description, from.strip(), to.strip());
+        return new Event(description, dateFrom.strip(), dateTo.strip());
     }
 }
