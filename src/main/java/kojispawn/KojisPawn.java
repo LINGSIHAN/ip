@@ -103,28 +103,41 @@ public class KojisPawn {
      * @throws KojisPawnException If a task number is outside the list.
      */
     private String execute(Command command) throws KojisPawnException {
+        assert command != null : "Command to execute must not be null";
+
         return switch (command.getType()) {
             case TODO, DEADLINE, EVENT:
+                assert command.getTask() != null
+                        : "Task creation commands must contain a task";
                 tasks.add(command.getTask());
                 storage.save(tasks);
                 yield ui.formatTaskAdded(command.getTask(), tasks.size());
             case LIST:
                 yield ui.formatTaskList(tasks.getTasks());
             case MARK:
+                assert command.getTaskNumber() != null && command.getTaskNumber() > 0
+                        : "Mark commands must contain a positive task number";
                 Task markedTask = tasks.mark(command.getTaskNumber());
                 storage.save(tasks);
                 yield ui.formatTaskMarked(markedTask);
             case UNMARK:
+                assert command.getTaskNumber() != null && command.getTaskNumber() > 0
+                        : "Unmark commands must contain a positive task number";
                 Task unmarkedTask = tasks.unmark(command.getTaskNumber());
                 storage.save(tasks);
                 yield ui.formatTaskUnmarked(unmarkedTask);
             case DELETE:
+                assert command.getTaskNumber() != null && command.getTaskNumber() > 0
+                        : "Delete commands must contain a positive task number";
                 Task deletedTask = tasks.delete(command.getTaskNumber());
                 storage.save(tasks);
                 yield ui.formatTaskDeleted(deletedTask, tasks.size());
             case ON:
+                assert command.getDate() != null : "On commands must contain a date";
                 yield ui.formatTasksOnDate(tasks.findOn(command.getDate()), command.getDate());
             case FIND:
+                assert command.getKeyword() != null && !command.getKeyword().isBlank()
+                        : "Find commands must contain a keyword";
                 yield ui.formatMatchingTasks(tasks.find(command.getKeyword()));
             case BYE:
                 isExitRequested = true;
