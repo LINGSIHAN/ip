@@ -49,22 +49,6 @@ public class Ui {
     }
 
     /**
-     * Shows the farewell message.
-     */
-    public void showExit() {
-        showResponse(getExitMessage());
-    }
-
-    /**
-     * Shows an error message between separator lines.
-     *
-     * @param message Error message to show.
-     */
-    public void showError(String message) {
-        showResponse(message);
-    }
-
-    /**
      * Shows a chatbot response between separator lines.
      *
      * @param message Response to show, which may contain multiple lines.
@@ -75,25 +59,6 @@ public class Ui {
             System.out.println(message);
         }
         System.out.print(LINE);
-    }
-
-    /**
-     * Shows all tasks in their current order.
-     *
-     * @param tasks Tasks to show.
-     */
-    public void showTaskList(List<Task> tasks) {
-        showResponse(formatTaskList(tasks));
-    }
-
-    /**
-     * Displays tasks occurring on a requested date.
-     *
-     * @param tasks Tasks matching the date.
-     * @param date Queried date.
-     */
-    public void showTasksOnDate(List<Task> tasks, LocalDate date) {
-        showResponse(formatTasksOnDate(tasks, date));
     }
 
     /**
@@ -121,15 +86,6 @@ public class Ui {
     }
 
     /**
-     * Displays tasks whose descriptions match a search keyword.
-     *
-     * @param tasks Matching tasks.
-     */
-    public void showMatchingTasks(List<Task> tasks) {
-        showResponse(formatMatchingTasks(tasks));
-    }
-
-    /**
      * Formats tasks whose descriptions match a search keyword.
      *
      * @param tasks Matching tasks.
@@ -139,16 +95,6 @@ public class Ui {
         String heading = "Here are the matching tasks in your list:";
         String numberedTasks = formatNumberedTasks(tasks);
         return numberedTasks.isEmpty() ? heading : heading + "\n" + numberedTasks;
-    }
-
-    /**
-     * Shows the task that was added and the updated task count.
-     *
-     * @param task Task that was added.
-     * @param taskCount Updated number of tasks.
-     */
-    public void showTaskAdded(Task task, int taskCount) {
-        showResponse(formatTaskAdded(task, taskCount));
     }
 
     /**
@@ -165,15 +111,6 @@ public class Ui {
     }
 
     /**
-     * Shows the task that was marked as complete.
-     *
-     * @param task Task that was marked.
-     */
-    public void showTaskMarked(Task task) {
-        showResponse(formatTaskMarked(task));
-    }
-
-    /**
      * Formats the response for a completed task.
      *
      * @param task Task that was marked.
@@ -184,15 +121,6 @@ public class Ui {
     }
 
     /**
-     * Shows the task that was marked as incomplete.
-     *
-     * @param task Task that was unmarked.
-     */
-    public void showTaskUnmarked(Task task) {
-        showResponse(formatTaskUnmarked(task));
-    }
-
-    /**
      * Formats the response for a task returned to an incomplete state.
      *
      * @param task Task that was unmarked.
@@ -200,16 +128,6 @@ public class Ui {
      */
     public String formatTaskUnmarked(Task task) {
         return "Even regression has its purpose. This task is incomplete once more:\n  " + task;
-    }
-
-    /**
-     * Shows the deleted task and the updated task count.
-     *
-     * @param task Task that was deleted.
-     * @param taskCount Updated number of tasks.
-     */
-    public void showTaskDeleted(Task task, int taskCount) {
-        showResponse(formatTaskDeleted(task, taskCount));
     }
 
     /**
