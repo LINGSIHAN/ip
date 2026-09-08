@@ -19,6 +19,7 @@ public class CommandTypeTest {
         assertEquals(CommandType.MARK, CommandType.getCommandTypeFromString("mark 1"));
         assertEquals(CommandType.UNMARK, CommandType.getCommandTypeFromString("unmark 1"));
         assertEquals(CommandType.DELETE, CommandType.getCommandTypeFromString("delete 1"));
+        assertEquals(CommandType.UNDO, CommandType.getCommandTypeFromString("undo"));
         assertEquals(CommandType.ON, CommandType.getCommandTypeFromString("on 2019-12-02"));
         assertEquals(CommandType.FIND, CommandType.getCommandTypeFromString("find book"));
         assertEquals(CommandType.BYE, CommandType.getCommandTypeFromString("bye"));

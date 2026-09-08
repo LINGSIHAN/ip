@@ -24,6 +24,13 @@ public class Deadline extends Task {
     }
 
     @Override
+    Task copy() {
+        Deadline copy = new Deadline(description, dateBy);
+        copyCompletionStatusTo(copy);
+        return copy;
+    }
+
+    @Override
     public String toDataString() {
         return "D | " + (isDone ? "1" : "0") + " | " + description + " | " + dateBy;
     }

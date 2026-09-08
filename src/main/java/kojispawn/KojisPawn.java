@@ -21,6 +21,7 @@ public class KojisPawn {
     private final TaskList tasks;
     private final Ui ui;
     private CommandType lastCommandType = CommandType.UNKNOWN;
+    private TaskList undoSnapshot;
     private boolean isExitRequested;
 
     /**
@@ -112,6 +113,7 @@ public class KojisPawn {
             case MARK -> markTask(command.getTaskNumber());
             case UNMARK -> unmarkTask(command.getTaskNumber());
             case DELETE -> deleteTask(command.getTaskNumber());
+            case UNDO -> undoLastTaskChange();
             case ON -> formatTasksOnDate(command.getDate());
             case FIND -> formatMatchingTasks(command.getKeyword());
             case BYE -> requestExit();
@@ -129,8 +131,10 @@ public class KojisPawn {
     private String addTask(Task task) throws KojisPawnException {
         assert task != null : "Task creation commands must contain a task";
 
+        TaskList previousTasks = tasks.copy();
         tasks.add(task);
         storage.save(tasks);
+        undoSnapshot = previousTasks;
         return ui.formatTaskAdded(task, tasks.size());
     }
 
@@ -145,8 +149,10 @@ public class KojisPawn {
         assert taskNumber != null && taskNumber > 0
                 : "Mark commands must contain a positive task number";
 
+        TaskList previousTasks = tasks.copy();
         Task markedTask = tasks.mark(taskNumber);
         storage.save(tasks);
+        undoSnapshot = previousTasks;
         return ui.formatTaskMarked(markedTask);
     }
 
@@ -161,8 +167,10 @@ public class KojisPawn {
         assert taskNumber != null && taskNumber > 0
                 : "Unmark commands must contain a positive task number";
 
+        TaskList previousTasks = tasks.copy();
         Task unmarkedTask = tasks.unmark(taskNumber);
         storage.save(tasks);
+        undoSnapshot = previousTasks;
         return ui.formatTaskUnmarked(unmarkedTask);
     }
 
@@ -177,9 +185,28 @@ public class KojisPawn {
         assert taskNumber != null && taskNumber > 0
                 : "Delete commands must contain a positive task number";
 
+        TaskList previousTasks = tasks.copy();
         Task deletedTask = tasks.delete(taskNumber);
         storage.save(tasks);
+        undoSnapshot = previousTasks;
         return ui.formatTaskDeleted(deletedTask, tasks.size());
+    }
+
+    /**
+     * Restores and saves the task state from before the most recent successful change.
+     *
+     * @return Response confirming the restored state.
+     * @throws KojisPawnException If there is no change to undo or the restored state cannot be saved.
+     */
+    private String undoLastTaskChange() throws KojisPawnException {
+        if (undoSnapshot == null) {
+            throw new KojisPawnException("There is no task change to undo.");
+        }
+
+        tasks.replaceWith(undoSnapshot);
+        storage.save(tasks);
+        undoSnapshot = null;
+        return ui.formatUndo();
     }
 
     /**

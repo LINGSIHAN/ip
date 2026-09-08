@@ -48,7 +48,7 @@ public class KojisPawnTest {
 
         assertEquals(
                 "That command was never part of the plan. "
-                        + "Try todo, deadline, event, list, mark, unmark, delete, on, find, or bye.",
+                        + "Try todo, deadline, event, list, mark, unmark, delete, undo, on, find, or bye.",
                 response);
         assertEquals(CommandType.UNKNOWN, koji.getLastCommandType());
         assertFalse(koji.isExitRequested());
@@ -65,5 +65,38 @@ public class KojisPawnTest {
                 response);
         assertEquals(CommandType.BYE, koji.getLastCommandType());
         assertTrue(koji.isExitRequested());
+    }
+
+    @Test
+    public void getResponse_undoTaskChanges_restoresMostRecentStateAndPersistsIt() throws Exception {
+        Path dataFile = tempDirectory.resolve("data/kojispawn.txt");
+        KojisPawn koji = new KojisPawn(dataFile);
+
+        koji.getResponse("todo first task");
+        koji.getResponse("todo second task");
+        koji.getResponse("mark 1");
+        assertEquals("The previous task change has been undone.", koji.getResponse("undo"));
+        assertEquals("1.[T][ ] first task\n2.[T][ ] second task", koji.getResponse("list"));
+
+        koji.getResponse("delete 1");
+        assertEquals("The previous task change has been undone.", koji.getResponse("undo"));
+        assertEquals("1.[T][ ] first task\n2.[T][ ] second task", koji.getResponse("list"));
+
+        assertEquals(List.of("T | 0 | first task", "T | 0 | second task"),
+                Files.readAllLines(dataFile));
+    }
+
+    @Test
+    public void getResponse_readOnlyAndFailedCommands_preserveUndoHistory() throws Exception {
+        KojisPawn koji = new KojisPawn(tempDirectory.resolve("kojispawn.txt"));
+
+        koji.getResponse("todo task");
+        koji.getResponse("list");
+        koji.getResponse("move knight");
+
+        assertEquals("The previous task change has been undone.", koji.getResponse("undo"));
+        assertEquals("", koji.getResponse("list"));
+        assertEquals("There is no task change to undo.", koji.getResponse("undo"));
+        assertEquals(CommandType.UNKNOWN, koji.getLastCommandType());
     }
 }
