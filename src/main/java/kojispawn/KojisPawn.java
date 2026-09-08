@@ -1,6 +1,7 @@
 package kojispawn;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 
 import kojispawn.command.Command;
 import kojispawn.command.CommandType;
@@ -106,44 +107,113 @@ public class KojisPawn {
         assert command != null : "Command to execute must not be null";
 
         return switch (command.getType()) {
-            case TODO, DEADLINE, EVENT:
-                assert command.getTask() != null
-                        : "Task creation commands must contain a task";
-                tasks.add(command.getTask());
-                storage.save(tasks);
-                yield ui.formatTaskAdded(command.getTask(), tasks.size());
-            case LIST:
-                yield ui.formatTaskList(tasks.getTasks());
-            case MARK:
-                assert command.getTaskNumber() != null && command.getTaskNumber() > 0
-                        : "Mark commands must contain a positive task number";
-                Task markedTask = tasks.mark(command.getTaskNumber());
-                storage.save(tasks);
-                yield ui.formatTaskMarked(markedTask);
-            case UNMARK:
-                assert command.getTaskNumber() != null && command.getTaskNumber() > 0
-                        : "Unmark commands must contain a positive task number";
-                Task unmarkedTask = tasks.unmark(command.getTaskNumber());
-                storage.save(tasks);
-                yield ui.formatTaskUnmarked(unmarkedTask);
-            case DELETE:
-                assert command.getTaskNumber() != null && command.getTaskNumber() > 0
-                        : "Delete commands must contain a positive task number";
-                Task deletedTask = tasks.delete(command.getTaskNumber());
-                storage.save(tasks);
-                yield ui.formatTaskDeleted(deletedTask, tasks.size());
-            case ON:
-                assert command.getDate() != null : "On commands must contain a date";
-                yield ui.formatTasksOnDate(tasks.findOn(command.getDate()), command.getDate());
-            case FIND:
-                assert command.getKeyword() != null && !command.getKeyword().isBlank()
-                        : "Find commands must contain a keyword";
-                yield ui.formatMatchingTasks(tasks.find(command.getKeyword()));
-            case BYE:
-                isExitRequested = true;
-                yield ui.getExitMessage();
-            case UNKNOWN:
-                throw new AssertionError("Parser returned an unknown command");
+            case TODO, DEADLINE, EVENT -> addTask(command.getTask());
+            case LIST -> ui.formatTaskList(tasks.getTasks());
+            case MARK -> markTask(command.getTaskNumber());
+            case UNMARK -> unmarkTask(command.getTaskNumber());
+            case DELETE -> deleteTask(command.getTaskNumber());
+            case ON -> formatTasksOnDate(command.getDate());
+            case FIND -> formatMatchingTasks(command.getKeyword());
+            case BYE -> requestExit();
+            case UNKNOWN -> throw new AssertionError("Parser returned an unknown command");
         };
+    }
+
+    /**
+     * Adds a task, saves the updated task list, and formats the response.
+     *
+     * @param task Task to add.
+     * @return Response describing the added task.
+     * @throws KojisPawnException If the updated task list cannot be saved.
+     */
+    private String addTask(Task task) throws KojisPawnException {
+        assert task != null : "Task creation commands must contain a task";
+
+        tasks.add(task);
+        storage.save(tasks);
+        return ui.formatTaskAdded(task, tasks.size());
+    }
+
+    /**
+     * Marks a task, saves the updated task list, and formats the response.
+     *
+     * @param taskNumber One-based number of the task to mark.
+     * @return Response describing the marked task.
+     * @throws KojisPawnException If the task number is invalid or the task list cannot be saved.
+     */
+    private String markTask(Integer taskNumber) throws KojisPawnException {
+        assert taskNumber != null && taskNumber > 0
+                : "Mark commands must contain a positive task number";
+
+        Task markedTask = tasks.mark(taskNumber);
+        storage.save(tasks);
+        return ui.formatTaskMarked(markedTask);
+    }
+
+    /**
+     * Unmarks a task, saves the updated task list, and formats the response.
+     *
+     * @param taskNumber One-based number of the task to unmark.
+     * @return Response describing the unmarked task.
+     * @throws KojisPawnException If the task number is invalid or the task list cannot be saved.
+     */
+    private String unmarkTask(Integer taskNumber) throws KojisPawnException {
+        assert taskNumber != null && taskNumber > 0
+                : "Unmark commands must contain a positive task number";
+
+        Task unmarkedTask = tasks.unmark(taskNumber);
+        storage.save(tasks);
+        return ui.formatTaskUnmarked(unmarkedTask);
+    }
+
+    /**
+     * Deletes a task, saves the updated task list, and formats the response.
+     *
+     * @param taskNumber One-based number of the task to delete.
+     * @return Response describing the deleted task.
+     * @throws KojisPawnException If the task number is invalid or the task list cannot be saved.
+     */
+    private String deleteTask(Integer taskNumber) throws KojisPawnException {
+        assert taskNumber != null && taskNumber > 0
+                : "Delete commands must contain a positive task number";
+
+        Task deletedTask = tasks.delete(taskNumber);
+        storage.save(tasks);
+        return ui.formatTaskDeleted(deletedTask, tasks.size());
+    }
+
+    /**
+     * Finds tasks occurring on a date and formats the response.
+     *
+     * @param date Date to search for.
+     * @return Response containing tasks that occur on the date.
+     */
+    private String formatTasksOnDate(LocalDate date) {
+        assert date != null : "On commands must contain a date";
+
+        return ui.formatTasksOnDate(tasks.findOn(date), date);
+    }
+
+    /**
+     * Finds tasks matching a keyword and formats the response.
+     *
+     * @param keyword Keyword to find.
+     * @return Response containing matching tasks.
+     */
+    private String formatMatchingTasks(String keyword) {
+        assert keyword != null && !keyword.isBlank()
+                : "Find commands must contain a keyword";
+
+        return ui.formatMatchingTasks(tasks.find(keyword));
+    }
+
+    /**
+     * Records that the application should exit and returns the farewell response.
+     *
+     * @return Farewell response.
+     */
+    private String requestExit() {
+        isExitRequested = true;
+        return ui.getExitMessage();
     }
 }
