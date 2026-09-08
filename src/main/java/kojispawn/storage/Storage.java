@@ -38,13 +38,10 @@ public class Storage {
         }
 
         try {
-            List<Task> tasks = new ArrayList<>();
-            for (String taskLine : Files.readAllLines(filePath)) {
-                if (!taskLine.isBlank()) {
-                    tasks.add(taskDataParser.parse(taskLine));
-                }
-            }
-            return tasks;
+            return Files.readAllLines(filePath).stream()
+                    .filter(taskLine -> !taskLine.isBlank())
+                    .map(taskDataParser::parse)
+                    .toList();
         } catch (IOException exception) {
             throw new KojisPawnException("I could not load the task list from " + filePath + ".");
         }
