@@ -49,6 +49,8 @@ public class Command {
 
     private Command(CommandType type, Task task, Integer taskNumber, LocalDate date,
             String keyword) {
+        assert type != null : "Command type must not be null";
+
         this.type = type;
         this.task = task;
         this.taskNumber = taskNumber;
