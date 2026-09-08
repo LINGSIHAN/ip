@@ -104,33 +104,77 @@ public class KojisPawn {
      */
     private String execute(Command command) throws KojisPawnException {
         return switch (command.getType()) {
-            case TODO, DEADLINE, EVENT:
-                tasks.add(command.getTask());
-                storage.save(tasks);
-                yield ui.formatTaskAdded(command.getTask(), tasks.size());
-            case LIST:
-                yield ui.formatTaskList(tasks.getTasks());
-            case MARK:
-                Task markedTask = tasks.mark(command.getTaskNumber());
-                storage.save(tasks);
-                yield ui.formatTaskMarked(markedTask);
-            case UNMARK:
-                Task unmarkedTask = tasks.unmark(command.getTaskNumber());
-                storage.save(tasks);
-                yield ui.formatTaskUnmarked(unmarkedTask);
-            case DELETE:
-                Task deletedTask = tasks.delete(command.getTaskNumber());
-                storage.save(tasks);
-                yield ui.formatTaskDeleted(deletedTask, tasks.size());
-            case ON:
-                yield ui.formatTasksOnDate(tasks.findOn(command.getDate()), command.getDate());
-            case FIND:
-                yield ui.formatMatchingTasks(tasks.find(command.getKeyword()));
-            case BYE:
-                isExitRequested = true;
-                yield ui.getExitMessage();
-            case UNKNOWN:
-                throw new AssertionError("Parser returned an unknown command");
+            case TODO, DEADLINE, EVENT -> addTask(command.getTask());
+            case LIST -> ui.formatTaskList(tasks.getTasks());
+            case MARK -> markTask(command.getTaskNumber());
+            case UNMARK -> unmarkTask(command.getTaskNumber());
+            case DELETE -> deleteTask(command.getTaskNumber());
+            case ON -> ui.formatTasksOnDate(tasks.findOn(command.getDate()), command.getDate());
+            case FIND -> ui.formatMatchingTasks(tasks.find(command.getKeyword()));
+            case BYE -> requestExit();
+            case UNKNOWN -> throw new AssertionError("Parser returned an unknown command");
         };
+    }
+
+    /**
+     * Adds a task, saves the updated task list, and formats the response.
+     *
+     * @param task Task to add.
+     * @return Response describing the added task.
+     * @throws KojisPawnException If the updated task list cannot be saved.
+     */
+    private String addTask(Task task) throws KojisPawnException {
+        tasks.add(task);
+        storage.save(tasks);
+        return ui.formatTaskAdded(task, tasks.size());
+    }
+
+    /**
+     * Marks a task, saves the updated task list, and formats the response.
+     *
+     * @param taskNumber One-based number of the task to mark.
+     * @return Response describing the marked task.
+     * @throws KojisPawnException If the task number is invalid or the task list cannot be saved.
+     */
+    private String markTask(int taskNumber) throws KojisPawnException {
+        Task markedTask = tasks.mark(taskNumber);
+        storage.save(tasks);
+        return ui.formatTaskMarked(markedTask);
+    }
+
+    /**
+     * Unmarks a task, saves the updated task list, and formats the response.
+     *
+     * @param taskNumber One-based number of the task to unmark.
+     * @return Response describing the unmarked task.
+     * @throws KojisPawnException If the task number is invalid or the task list cannot be saved.
+     */
+    private String unmarkTask(int taskNumber) throws KojisPawnException {
+        Task unmarkedTask = tasks.unmark(taskNumber);
+        storage.save(tasks);
+        return ui.formatTaskUnmarked(unmarkedTask);
+    }
+
+    /**
+     * Deletes a task, saves the updated task list, and formats the response.
+     *
+     * @param taskNumber One-based number of the task to delete.
+     * @return Response describing the deleted task.
+     * @throws KojisPawnException If the task number is invalid or the task list cannot be saved.
+     */
+    private String deleteTask(int taskNumber) throws KojisPawnException {
+        Task deletedTask = tasks.delete(taskNumber);
+        storage.save(tasks);
+        return ui.formatTaskDeleted(deletedTask, tasks.size());
+    }
+
+    /**
+     * Records that the application should exit and returns the farewell response.
+     *
+     * @return Farewell response.
+     */
+    private String requestExit() {
+        isExitRequested = true;
+        return ui.getExitMessage();
     }
 }
