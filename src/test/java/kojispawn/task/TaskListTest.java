@@ -83,6 +83,36 @@ public class TaskListTest {
     }
 
     @Test
+    public void copy_originalTaskChanges_doesNotChangeCopy() throws KojisPawnException {
+        TaskList original = new TaskList(List.of(
+                new Todo("todo"),
+                new Deadline("deadline", LocalDate.of(2019, 12, 2)),
+                new Event("event", "2pm", "4pm")));
+        original.mark(2);
+
+        TaskList copy = original.copy();
+        original.mark(1);
+        original.delete(3);
+
+        assertEquals(List.of(
+                "[T][ ] todo",
+                "[D][X] deadline (by: Dec 2 2019)",
+                "[E][ ] event (from: 2pm to: 4pm)"),
+                copy.getTasks().stream().map(Task::toString).toList());
+    }
+
+    @Test
+    public void replaceWith_sourceChanges_doesNotChangeReplacement() throws KojisPawnException {
+        TaskList source = new TaskList(List.of(new Todo("task")));
+        TaskList replacement = new TaskList();
+
+        replacement.replaceWith(source);
+        source.mark(1);
+
+        assertEquals("[T][ ] task", replacement.getTasks().get(0).toString());
+    }
+
+    @Test
     public void delete_validTask_removesAndReturnsTask() throws KojisPawnException {
         TaskList taskList = new TaskList(List.of(
                 new Todo("keep"), new Todo("remove")));

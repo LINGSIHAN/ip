@@ -73,6 +73,13 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_validUndo_returnsUndoCommand() throws KojisPawnException {
+        Command command = parser.parse("undo");
+
+        assertEquals(CommandType.UNDO, command.getType());
+    }
+
+    @Test
     public void parse_impossibleDeadlineDate_throwsException() {
         KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
                 parser.parse("deadline return book /by 2019-02-30"));
@@ -94,6 +101,11 @@ public class ParserTest {
     @Test
     public void parse_listWithExtraArguments_throwsException() {
         assertThrows(KojisPawnException.class, () -> parser.parse("list please"));
+    }
+
+    @Test
+    public void parse_undoWithExtraArguments_throwsException() {
+        assertThrows(KojisPawnException.class, () -> parser.parse("undo please"));
     }
 
     @Test

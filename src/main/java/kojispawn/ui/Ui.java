@@ -144,6 +144,15 @@ public class Ui {
     }
 
     /**
+     * Returns the response for a successfully undone task change.
+     *
+     * @return Undo confirmation.
+     */
+    public String formatUndo() {
+        return "The previous task change has been undone.";
+    }
+
+    /**
      * Returns Koji's Pawn's farewell message.
      *
      * @return Farewell response.

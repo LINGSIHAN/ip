@@ -31,7 +31,7 @@ public class Parser {
             case DELETE -> new Command(type, null, parseTaskNumber(command, "delete"));
             case ON -> parseOnCommand(command, type);
             case FIND -> parseFind(command, type);
-            case LIST, BYE -> parseExactCommand(command, type);
+            case LIST, UNDO, BYE -> parseExactCommand(command, type);
             case UNKNOWN -> throw createUnknownCommandException();
         };
     }
@@ -88,6 +88,6 @@ public class Parser {
     private KojisPawnException createUnknownCommandException() {
         return new KojisPawnException(
                 "That command was never part of the plan. "
-                        + "Try todo, deadline, event, list, mark, unmark, delete, on, find, or bye.");
+                        + "Try todo, deadline, event, list, mark, unmark, delete, undo, on, find, or bye.");
     }
 }

@@ -42,6 +42,14 @@ public abstract class Task {
         isDone = false;
     }
 
+    abstract Task copy();
+
+    protected void copyCompletionStatusTo(Task copy) {
+        if (isDone) {
+            copy.markAsDone();
+        }
+    }
+
     /**
      * Converts this task into the stable format used in the data file.
      *

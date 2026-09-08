@@ -57,6 +57,29 @@ public class TaskList {
     }
 
     /**
+     * Returns an independent copy of this task list and its task states.
+     *
+     * @return Copy of the current task list.
+     */
+    public TaskList copy() {
+        return new TaskList(tasks.stream()
+                .map(Task::copy)
+                .toList());
+    }
+
+    /**
+     * Replaces the current tasks with independent copies from another task list.
+     *
+     * @param source Task list to copy from.
+     */
+    public void replaceWith(TaskList source) {
+        tasks.clear();
+        source.tasks.stream()
+                .map(Task::copy)
+                .forEach(tasks::add);
+    }
+
+    /**
      * Finds tasks that occur on the given date.
      *
      * @param date Date to search for.

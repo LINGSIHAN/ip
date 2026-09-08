@@ -265,7 +265,7 @@ Now speak. What role will you play in his masterpiece?
 
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, find, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, undo, on, find, or bye.
 -----------------
 -----------------
 Got it. I've added this task:
@@ -675,7 +675,7 @@ Even calculated events need an endpoint. Include /to END.
 No task occupies that position. Choose a number from 1 to 1.
 -----------------
 -----------------
-That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, on, find, or bye.
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, undo, on, find, or bye.
 -----------------
 -----------------
 Got it. I've added this task:
@@ -847,6 +847,98 @@ Here are the matching tasks in your list:
 -----------------
 -----------------
 Specify a keyword. Use: find KEYWORD.
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
+
+## Undo the most recent task change
+
+Aim: Verify undo restores one add, status, or delete change, survives read-only and failed commands,
+persists the restored list, and cannot be repeated without another task change.
+
+### Commands
+
+```text
+undo
+todo first task
+todo second task
+mark 1
+list
+blah
+undo
+list
+delete 2
+undo
+list
+undo
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+There is no task change to undo.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] first task
+Now you have 1 task in the list.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] second task
+Now you have 2 tasks in the list.
+-----------------
+-----------------
+Another variable falls into place. This task is now complete:
+  [T][X] first task
+-----------------
+-----------------
+1.[T][X] first task
+2.[T][ ] second task
+-----------------
+-----------------
+That command was never part of the plan. Try todo, deadline, event, list, mark, unmark, delete, undo, on, find, or bye.
+-----------------
+-----------------
+The previous task change has been undone.
+-----------------
+-----------------
+1.[T][ ] first task
+2.[T][ ] second task
+-----------------
+-----------------
+A disposable piece has left the board. This task has been removed:
+  [T][ ] second task
+Now you have 1 task in the list.
+-----------------
+-----------------
+The previous task change has been undone.
+-----------------
+-----------------
+1.[T][ ] first task
+2.[T][ ] second task
+-----------------
+-----------------
+There is no task change to undo.
 -----------------
 -----------------
 Leaving already? How predictable. Your return was already part of the plan.
