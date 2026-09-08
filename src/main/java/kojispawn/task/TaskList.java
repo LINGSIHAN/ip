@@ -124,6 +124,9 @@ public class TaskList {
     }
 
     private void validateTaskNumber(int taskNumber, String action) throws KojisPawnException {
+        if (taskNumber <= 0) {
+            throw new KojisPawnException("The list begins at 1. Choose a positive task number.");
+        }
         if (tasks.isEmpty()) {
             throw new KojisPawnException("There are no tasks to " + action + " yet.");
         }

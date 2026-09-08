@@ -105,6 +105,23 @@ public class TaskListTest {
     }
 
     @Test
+    public void markUnmarkAndDelete_nonPositiveTaskNumbers_throwException() {
+        TaskList taskList = new TaskList(List.of(new Todo("only task")));
+
+        KojisPawnException markException = assertThrows(KojisPawnException.class, () ->
+                taskList.mark(0));
+        KojisPawnException unmarkException = assertThrows(KojisPawnException.class, () ->
+                taskList.unmark(-1));
+        KojisPawnException deleteException = assertThrows(KojisPawnException.class, () ->
+                taskList.delete(0));
+
+        String expectedMessage = "The list begins at 1. Choose a positive task number.";
+        assertEquals(expectedMessage, markException.getMessage());
+        assertEquals(expectedMessage, unmarkException.getMessage());
+        assertEquals(expectedMessage, deleteException.getMessage());
+    }
+
+    @Test
     public void delete_taskNumberAboveSize_throwsException() {
         TaskList taskList = new TaskList(List.of(new Todo("only task")));
 
