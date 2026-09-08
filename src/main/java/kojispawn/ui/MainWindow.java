@@ -53,6 +53,8 @@ public class MainWindow extends AnchorPane {
      */
     @FXML
     private void handleUserInput() {
+        assert koji != null : "Koji must be initialized before handling user input";
+
         String userText = userInput.getText();
         String kojiText = koji.getResponse(userText);
         CommandType commandType = koji.getLastCommandType();
