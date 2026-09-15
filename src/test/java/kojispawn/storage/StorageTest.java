@@ -1,6 +1,7 @@
 package kojispawn.storage;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Files;
@@ -24,6 +25,39 @@ import kojispawn.task.Todo;
 public class StorageTest {
     @TempDir
     private Path tempDirectory;
+
+    @Test
+    public void load_malformedRecord_reportsPhysicalLineAndPreservesFile() throws Exception {
+        Path dataFile = tempDirectory.resolve("kojispawn.txt");
+        Storage storage = new Storage(dataFile);
+        List<String> invalidRecords = List.of(
+                "T | 0", "D | 0 | task", "E | 0 | task | start",
+                "T | 0 | read A | B", "X | 0 | task", "T | 2 | task",
+                "T | 0 | ", "E | 0 | task |  | end", "E | 0 | task | start | ",
+                "D | 0 | task | 2026-02-30");
+
+        for (String record : invalidRecords) {
+            List<String> originalData = List.of("T | 0 | valid task", "", record);
+            Files.write(dataFile, originalData);
+
+            KojisPawnException exception = assertThrows(KojisPawnException.class, storage::load, record);
+
+            assertTrue(exception.getMessage().startsWith("Invalid task data in " + dataFile + " at line 3: "),
+                    exception.getMessage());
+            assertEquals(originalData, Files.readAllLines(dataFile));
+        }
+    }
+
+    @Test
+    public void load_blankLines_preservesValidTasks() throws Exception {
+        Path dataFile = tempDirectory.resolve("kojispawn.txt");
+        Files.write(dataFile, List.of("", "T | 1 | read book", "  ", "T | 0 | write notes"));
+
+        List<Task> tasks = new Storage(dataFile).load();
+
+        assertEquals(List.of("[T][X] read book", "[T][ ] write notes"),
+                tasks.stream().map(Task::toString).toList());
+    }
 
     @Test
     public void load_missingFile_returnsEmptyList() throws KojisPawnException {

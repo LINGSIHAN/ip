@@ -30,7 +30,7 @@ public class Storage {
      * Loads tasks from the data file, preserving their types and completion states.
      *
      * @return Tasks stored in the file, or an empty list when the file does not exist.
-     * @throws KojisPawnException If the file cannot be read.
+     * @throws KojisPawnException If the file cannot be read or contains malformed task data.
      */
     public List<Task> load() throws KojisPawnException {
         if (!Files.exists(filePath)) {
@@ -38,13 +38,29 @@ public class Storage {
         }
 
         try {
-            return Files.readAllLines(filePath).stream()
-                    .filter(taskLine -> !taskLine.isBlank())
-                    .map(taskDataParser::parse)
-                    .toList();
+            return parseTaskLines(Files.readAllLines(filePath));
         } catch (IOException exception) {
             throw new KojisPawnException("I could not load the task list from " + filePath + ".");
         }
+    }
+
+    /**
+     * Retains physical line numbers, including blank lines, when reporting malformed records.
+     */
+    private List<Task> parseTaskLines(List<String> lines) throws KojisPawnException {
+        List<Task> loadedTasks = new ArrayList<>();
+        for (int index = 0; index < lines.size(); index++) {
+            if (lines.get(index).isBlank()) {
+                continue;
+            }
+            try {
+                loadedTasks.add(taskDataParser.parse(lines.get(index)));
+            } catch (KojisPawnException exception) {
+                throw new KojisPawnException("Invalid task data in " + filePath + " at line "
+                        + (index + 1) + ": " + exception.getMessage());
+            }
+        }
+        return loadedTasks;
     }
 
     /**
