@@ -71,7 +71,8 @@ event webinar sharing /from 2026-09-20 2pm /to 2026-09-20 4pm
 The `/from` and `/to` markers are required, must occur in that order, and may each appear only once. Event values
 can be free-form text such as `Monday 2pm` or `4pm`. When a value begins with `yyyy-MM-dd`, Koji's Pawn checks that
 it is a real calendar date. A time or other text may follow the date after a space. If both values begin with dates,
-the end date must be the same as or later than the start date. For example, this command is rejected:
+the `/from` date cannot be later than the `/to` date; events on the same date are allowed. For example, this command
+is rejected:
 
 ```text
 event webinar sharing /from 2026-09-21 /to 2026-09-20
@@ -130,6 +131,15 @@ bye
 ```
 
 In the chat window, `bye` displays Koji's farewell briefly before closing.
+
+## Input errors
+
+If a command is rejected, Koji's Pawn explains the problem and leaves your tasks unchanged. Check for missing
+descriptions or values and task numbers that do not exist. Dates used with `deadline` or `on` must use `yyyy-MM-dd`
+and be real calendar dates. A leading `yyyy-MM-dd` in an event must also be real.
+
+Repeated `/by`, `/from`, or `/to` markers are rejected. Event starts and ends must appear in that order, and a dated
+event cannot end on a date earlier than it starts. Extra spaces around a command are allowed.
 
 ## Task symbols
 
