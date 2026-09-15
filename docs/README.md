@@ -2,7 +2,6 @@
 
 Koji's Pawn is a task-management chatbot with a JavaFX chat window and a console interface. It manages todos,
 deadlines, and events, saves task changes between sessions, and lets you search tasks or undo your most recent change.
-The chat uses Koji's Pawn's own voice and a midnight-and-gold look instead of the starter JavaFX design.
 
 ![Koji's Pawn JavaFX chat showing tasks and undo](Ui.png)
 
@@ -131,13 +130,6 @@ bye
 The console also exits cleanly when its input stream ends. In the JavaFX chat, `bye` displays Koji's farewell
 briefly before closing the window.
 
-## JavaFX chat appearance
-
-The chat has a Cinzel title, a midnight-and-gold palette, and a gold pawn emblem and window icon. Koji's replies
-appear on the left beside a mask avatar; your messages appear on the right beside a stickman avatar. Responses to
-different kinds of commands have distinct colors, and errors receive their own styling. This gives the chatbot a
-visual identity alongside its distinctive responses.
-
 ## Task symbols
 
 | Symbol | Meaning |
@@ -175,12 +167,3 @@ between ordinary command parts are accepted.
 If saving fails, Koji's Pawn reports the error and keeps the current task list and undo history so you can retry.
 If saved data cannot be loaded, the JavaFX interface displays the storage error in an alert. Malformed saved records
 report their file and line number; the data file is left in place for you to inspect or repair.
-
-## Project checks
-
-The project includes JUnit tests for command parsing, task operations, storage failures, and response formatting,
-plus exact-output [console UI tests](../test/ui-test-plan.md). Gradle can run the Java tests and Checkstyle checks:
-
-```powershell
-.\gradlew.bat test checkstyleMain checkstyleTest
-```
