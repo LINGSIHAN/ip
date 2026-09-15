@@ -23,6 +23,15 @@ public class Ui {
     }
 
     /**
+     * Returns whether another command is available before the input stream ends.
+     *
+     * @return {@code true} if a command can be read.
+     */
+    public boolean hasNextCommand() {
+        return scanner.hasNextLine();
+    }
+
+    /**
      * Shows the application banner and greeting.
      */
     public void showGreeting() {

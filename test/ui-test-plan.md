@@ -1003,3 +1003,83 @@ Now you have 1 task in the list.
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Repeated task markers
+
+Aim: Verify duplicate /by, /from, and /to parameters are rejected without saving tasks.
+
+### Commands
+
+```text
+deadline submit report /by 2026-09-15 /by 2026-09-16
+event meeting /from morning /from noon /to evening
+event meeting /from morning /to evening /to night
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Specify /by only once.
+-----------------
+-----------------
+Specify /from only once.
+-----------------
+-----------------
+Specify /to only once.
+-----------------
+-----------------
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```
+
+## End of console input
+
+Aim: Verify the chatbot exits successfully after the final command when stdin closes without bye.
+
+### Commands
+
+```text
+list
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+-----------------
+```

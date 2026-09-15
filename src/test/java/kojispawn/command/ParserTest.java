@@ -72,6 +72,27 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_repeatedTaskMarkers_rejectsDuplicateParameters() {
+        String[][] cases = {
+            {"deadline submit report /by 2026-09-15 /by 2026-09-16", "Specify /by only once."},
+            {"event meeting /from morning /from noon /to evening", "Specify /from only once."},
+            {"event meeting /from morning /to evening /to night", "Specify /to only once."}
+        };
+        for (String[] testCase : cases) {
+            KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                    parser.parse(testCase[0]), testCase[0]);
+            assertEquals(testCase[1], exception.getMessage());
+        }
+    }
+
+    @Test
+    public void parse_similarTextInEventValue_doesNotTreatItAsRepeatedMarker() throws KojisPawnException {
+        Command command = parser.parse("event meeting /from morning /to /fromage");
+
+        assertEquals("[E][ ] meeting (from: morning to: /fromage)", command.getTask().toString());
+    }
+
+    @Test
     public void parse_validTodo_returnsTodoCommand() throws KojisPawnException {
         Command command = parser.parse("todo read book");
 
