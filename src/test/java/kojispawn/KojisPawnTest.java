@@ -115,6 +115,48 @@ public class KojisPawnTest {
     }
 
     @Test
+    public void getResponse_searchCommands_returnMatchesAndEmptyResults() throws Exception {
+        KojisPawn koji = new KojisPawn(tempDirectory.resolve("kojispawn.txt"));
+        koji.getResponse("todo read book");
+        koji.getResponse("deadline return book /by 2019-12-02");
+        koji.getResponse("event project meeting /from book club /to evening");
+
+        assertEquals("Dated tasks occurring on 2019-12-02:\n"
+                + "1.[D][ ] return book (by: Dec 2 2019)", koji.getResponse("on 2019-12-02"));
+        assertEquals(CommandType.ON, koji.getLastCommandType());
+        assertEquals("No dated tasks occur on 2019-12-03.", koji.getResponse("on 2019-12-03"));
+        assertEquals("Here are the matching tasks in your list:\n"
+                + "1.[T][ ] read book\n2.[D][ ] return book (by: Dec 2 2019)",
+                koji.getResponse("find book"));
+        assertEquals(CommandType.FIND, koji.getLastCommandType());
+        assertEquals("Here are the matching tasks in your list:", koji.getResponse("find Board"));
+    }
+
+    @Test
+    public void getResponse_deadlineEventUnmarkAndDelete_returnResponsesAndPersistChanges()
+            throws Exception {
+        Path dataFile = tempDirectory.resolve("kojispawn.txt");
+        KojisPawn koji = new KojisPawn(dataFile);
+
+        assertEquals("Got it. I've added this task:\n"
+                + "  [D][ ] return book (by: Dec 2 2019)\n"
+                + "Now you have 1 task in the list.",
+                koji.getResponse("deadline return book /by 2019-12-02"));
+        assertEquals("Got it. I've added this task:\n"
+                + "  [E][ ] meeting (from: Monday to: Tuesday)\n"
+                + "Now you have 2 tasks in the list.",
+                koji.getResponse("event meeting /from Monday /to Tuesday"));
+
+        koji.getResponse("mark 1");
+        assertEquals("Even regression has its purpose. This task is incomplete once more:\n"
+                + "  [D][ ] return book (by: Dec 2 2019)", koji.getResponse("unmark 1"));
+        assertEquals("A disposable piece has left the board. This task has been removed:\n"
+                + "  [E][ ] meeting (from: Monday to: Tuesday)\n"
+                + "Now you have 1 task in the list.", koji.getResponse("delete 2"));
+        assertEquals(List.of("D | 0 | return book | 2019-12-02"), Files.readAllLines(dataFile));
+    }
+
+    @Test
     public void getResponse_invalidCommand_returnsErrorAndUnknownType() throws Exception {
         KojisPawn koji = new KojisPawn(tempDirectory.resolve("kojispawn.txt"));
 

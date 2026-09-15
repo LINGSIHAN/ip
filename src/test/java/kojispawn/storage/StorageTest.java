@@ -67,6 +67,18 @@ public class StorageTest {
     }
 
     @Test
+    public void load_existingDirectory_reportsReadFailureWithoutChangingDirectory() throws Exception {
+        Path dataFile = tempDirectory.resolve("kojispawn.txt");
+        Files.createDirectory(dataFile);
+
+        KojisPawnException exception = assertThrows(KojisPawnException.class,
+                new Storage(dataFile)::load);
+
+        assertEquals("I could not load the task list from " + dataFile + ".", exception.getMessage());
+        assertTrue(Files.isDirectory(dataFile));
+    }
+
+    @Test
     public void saveThenLoad_mixedTasks_preservesTaskData() throws Exception {
         Path dataFile = tempDirectory.resolve("data/kojispawn.txt");
         Storage storage = new Storage(dataFile);

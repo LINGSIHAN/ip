@@ -99,6 +99,21 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_onMissingOrInvalidDate_returnsSpecificErrors() {
+        String[][] cases = {
+            {"on", "Specify a date. Use: on yyyy-MM-dd."},
+            {"on 2019-02-30", "Query dates must use yyyy-MM-dd and describe a real calendar date."},
+            {"on tomorrow", "Query dates must use yyyy-MM-dd and describe a real calendar date."}
+        };
+
+        for (String[] testCase : cases) {
+            KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                    parser.parse(testCase[0]), testCase[0]);
+            assertEquals(testCase[1], exception.getMessage());
+        }
+    }
+
+    @Test
     public void parse_validEvent_returnsEventCommand() throws KojisPawnException {
         Command command = parser.parse("event project meeting /from 2pm /to 4pm");
 
@@ -114,6 +129,24 @@ public class ParserTest {
 
         assertEquals(CommandType.MARK, command.getType());
         assertEquals(3, command.getTaskNumber());
+    }
+
+    @Test
+    public void parse_taskNumberMissingOrNonnumeric_returnsActionSpecificErrors() {
+        String[][] cases = {
+            {"mark", "Specify which task to mark. Use: mark TASK_NUMBER."},
+            {"unmark", "Specify which task to unmark. Use: unmark TASK_NUMBER."},
+            {"delete", "Specify which task to delete. Use: delete TASK_NUMBER."},
+            {"mark one", "Task positions are numbers, not guesses. Use: mark TASK_NUMBER."},
+            {"unmark one", "Task positions are numbers, not guesses. Use: unmark TASK_NUMBER."},
+            {"delete one", "Task positions are numbers, not guesses. Use: delete TASK_NUMBER."}
+        };
+
+        for (String[] testCase : cases) {
+            KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                    parser.parse(testCase[0]), testCase[0]);
+            assertEquals(testCase[1], exception.getMessage());
+        }
     }
 
     @Test
