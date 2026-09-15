@@ -944,3 +944,62 @@ There is no task change to undo.
 Leaving already? How predictable. Your return was already part of the plan.
 -----------------
 ```
+
+## Reserved storage separator recovery
+
+Aim: Verify unsafe field separators are rejected without adding tasks, while a literal pipe without surrounding spaces is accepted.
+
+### Commands
+
+```text
+todo read A | B
+deadline A | B /by 2026-09-15
+event meeting /from A | B /to evening
+event meeting /from morning /to A | B
+todo read A|B
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Task text cannot contain the reserved separator ' | ' or line breaks.
+-----------------
+-----------------
+Task text cannot contain the reserved separator ' | ' or line breaks.
+-----------------
+-----------------
+Task text cannot contain the reserved separator ' | ' or line breaks.
+-----------------
+-----------------
+Task text cannot contain the reserved separator ' | ' or line breaks.
+-----------------
+-----------------
+Got it. I've added this task:
+  [T][ ] read A|B
+Now you have 1 task in the list.
+-----------------
+-----------------
+1.[T][ ] read A|B
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```

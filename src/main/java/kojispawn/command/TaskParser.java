@@ -13,14 +13,21 @@ import kojispawn.task.Todo;
  * Converts task-creation command arguments into task objects.
  */
 final class TaskParser {
+    private static final String MISSING_EVENT_DESCRIPTION =
+            "An event without a description cannot enter the plan. "
+                    + "Use: event DESCRIPTION /from START /to END.";
+    private static final String MISSING_EVENT_START = "Every event has an origin. Include /from START.";
+    private static final String MISSING_EVENT_END =
+            "Even calculated events need an endpoint. Include /to END.";
     /**
      * Creates a todo from a todo command.
      *
      * @param command Complete todo command.
      * @return Todo described by the command.
-     * @throws KojisPawnException If the description is missing.
+     * @throws KojisPawnException If the description is missing or contains reserved storage characters.
      */
     Task parseTodo(String command) throws KojisPawnException {
+        validateStorageText(command);
         String description = command.substring("todo".length()).strip();
         if (description.isBlank()) {
             throw new KojisPawnException(
@@ -37,6 +44,7 @@ final class TaskParser {
      * @throws KojisPawnException If the description or deadline date is invalid.
      */
     Task parseDeadline(String command) throws KojisPawnException {
+        validateStorageText(command);
         String deadlineDetails = command.substring("deadline".length()).strip();
         if (deadlineDetails.isBlank() || deadlineDetails.startsWith("/by")) {
             throw new KojisPawnException(
@@ -56,16 +64,11 @@ final class TaskParser {
                     "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
         }
 
-        String dateBy = deadlineDetails.substring(byIndex + byMarker.length());
-        if (dateBy.isBlank()) {
-            throw new KojisPawnException("The plan requires a deadline value after /by.");
-        }
-        if (!Character.isWhitespace(dateBy.charAt(0))) {
-            throw new KojisPawnException(
-                    "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
-        }
+        String dateBy = parseRequiredValue(deadlineDetails.substring(byIndex + byMarker.length()),
+                "The plan requires a deadline value after /by.",
+                "Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.");
         try {
-            return new Deadline(description, LocalDate.parse(dateBy.strip()));
+            return new Deadline(description, LocalDate.parse(dateBy));
         } catch (DateTimeParseException exception) {
             throw new KojisPawnException(
                     "Deadline dates must use yyyy-MM-dd and describe a real calendar date.");
@@ -80,51 +83,63 @@ final class TaskParser {
      * @throws KojisPawnException If the description, start, or end is invalid.
      */
     Task parseEvent(String command) throws KojisPawnException {
-        String eventDetails = command.substring("event".length()).strip();
-        if (eventDetails.isBlank()
-                || eventDetails.startsWith("/from")
-                || eventDetails.startsWith("/to")) {
-            throw new KojisPawnException(
-                    "An event without a description cannot enter the plan. "
-                            + "Use: event DESCRIPTION /from START /to END.");
-        }
-
+        validateStorageText(command);
+        String eventDetails = parseEventDetails(command);
         String fromMarker = " /from";
         String toMarker = " /to";
-        int fromIndex = eventDetails.indexOf(fromMarker);
-        int toIndex = eventDetails.indexOf(toMarker);
-        if (fromIndex == -1) {
-            throw new KojisPawnException("Every event has an origin. Include /from START.");
-        }
-        if (toIndex == -1) {
-            throw new KojisPawnException("Even calculated events need an endpoint. Include /to END.");
-        }
+        int fromIndex = findRequiredMarker(eventDetails, fromMarker, MISSING_EVENT_START);
+        int toIndex = findRequiredMarker(eventDetails, toMarker, MISSING_EVENT_END);
         if (toIndex < fromIndex) {
             throw new KojisPawnException("Causality matters. Place /from START before /to END.");
         }
 
         String description = eventDetails.substring(0, fromIndex).strip();
-        if (description.isBlank()) {
+        String dateFrom = parseRequiredValue(eventDetails.substring(fromIndex + fromMarker.length(), toIndex),
+                "The plan requires a starting value after /from.", MISSING_EVENT_START);
+        String dateTo = parseRequiredValue(eventDetails.substring(toIndex + toMarker.length()),
+                "The plan requires an ending value after /to.", MISSING_EVENT_END);
+        return new Event(description, dateFrom, dateTo);
+    }
+
+    private String parseEventDetails(String command) throws KojisPawnException {
+        String details = command.substring("event".length()).strip();
+        if (details.isBlank() || details.startsWith("/from") || details.startsWith("/to")) {
+            throw new KojisPawnException(MISSING_EVENT_DESCRIPTION);
+        }
+        return details;
+    }
+
+    private int findRequiredMarker(String details, String marker, String errorMessage)
+            throws KojisPawnException {
+        int index = details.indexOf(marker);
+        if (index == -1) {
+            throw new KojisPawnException(errorMessage);
+        }
+        return index;
+    }
+
+    /**
+     * Requires a nonempty value separated from its marker by whitespace.
+     */
+    private String parseRequiredValue(String value, String missingValueMessage, String missingMarkerMessage)
+            throws KojisPawnException {
+        if (value.isBlank()) {
+            throw new KojisPawnException(missingValueMessage);
+        }
+        // Check before stripping so malformed markers such as /from2pm are rejected.
+        if (!Character.isWhitespace(value.charAt(0))) {
+            throw new KojisPawnException(missingMarkerMessage);
+        }
+        return value.strip();
+    }
+
+    /**
+     * Rejects text that would be mistaken for a field or record boundary in the data file.
+     */
+    private void validateStorageText(String text) throws KojisPawnException {
+        if (text.contains(" | ") || text.contains("\n") || text.contains("\r")) {
             throw new KojisPawnException(
-                    "An event without a description cannot enter the plan. "
-                            + "Use: event DESCRIPTION /from START /to END.");
+                    "Task text cannot contain the reserved separator ' | ' or line breaks.");
         }
-
-        String dateFrom = eventDetails.substring(fromIndex + fromMarker.length(), toIndex);
-        if (dateFrom.isBlank()) {
-            throw new KojisPawnException("The plan requires a starting value after /from.");
-        }
-        if (!Character.isWhitespace(dateFrom.charAt(0))) {
-            throw new KojisPawnException("Every event has an origin. Include /from START.");
-        }
-
-        String dateTo = eventDetails.substring(toIndex + toMarker.length());
-        if (dateTo.isBlank()) {
-            throw new KojisPawnException("The plan requires an ending value after /to.");
-        }
-        if (!Character.isWhitespace(dateTo.charAt(0))) {
-            throw new KojisPawnException("Even calculated events need an endpoint. Include /to END.");
-        }
-        return new Event(description, dateFrom.strip(), dateTo.strip());
     }
 }

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertInstanceOf;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,57 @@ import kojispawn.task.Todo;
  */
 public class ParserTest {
     private final Parser parser = new Parser();
+
+    @Test
+    public void parse_reservedStorageText_rejectsUnsafeTaskFields() {
+        List<String> commands = List.of(
+                "todo read A | B", "deadline A | B /by 2026-09-15",
+                "event A | B /from morning /to evening",
+                "event meeting /from A | B /to evening",
+                "event meeting /from morning /to A | B", "todo first\nsecond", "todo first\rsecond");
+        for (String command : commands) {
+            KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                    parser.parse(command));
+            assertEquals("Task text cannot contain the reserved separator ' | ' or line breaks.",
+                    exception.getMessage());
+        }
+    }
+
+    @Test
+    public void parse_eventFields_preservesValidationMessages() {
+        String[][] cases = {
+            {"event /from 2pm /to 4pm", "An event without a description cannot enter the plan. "
+                    + "Use: event DESCRIPTION /from START /to END."},
+            {"event meeting /to 4pm", "Every event has an origin. Include /from START."},
+            {"event meeting /from 2pm", "Even calculated events need an endpoint. Include /to END."},
+            {"event meeting /to 4pm /from 2pm", "Causality matters. Place /from START before /to END."},
+            {"event meeting /from /to 4pm", "The plan requires a starting value after /from."},
+            {"event meeting /from 2pm /to", "The plan requires an ending value after /to."},
+            {"event meeting /from2pm /to 4pm", "Every event has an origin. Include /from START."},
+            {"event meeting /from 2pm /to4pm", "Even calculated events need an endpoint. Include /to END."}
+        };
+        for (String[] testCase : cases) {
+            KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                    parser.parse(testCase[0]), testCase[0]);
+            assertEquals(testCase[1], exception.getMessage());
+        }
+    }
+
+    @Test
+    public void parse_spacedEventAndLiteralPipe_preservesText() throws KojisPawnException {
+        Command command = parser.parse("  event  A|B  /from   Mon 2pm  /to   4pm  ");
+
+        assertEquals("[E][ ] A|B (from: Mon 2pm to: 4pm)", command.getTask().toString());
+    }
+
+    @Test
+    public void parse_deadlineMarkerWithoutSpace_rejectsMalformedMarker() {
+        KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                parser.parse("deadline task /by2026-09-15"));
+
+        assertEquals("Even a deadline needs a boundary. Use: deadline DESCRIPTION /by DATE.",
+                exception.getMessage());
+    }
 
     @Test
     public void parse_validTodo_returnsTodoCommand() throws KojisPawnException {
