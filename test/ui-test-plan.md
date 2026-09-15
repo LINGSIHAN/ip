@@ -1083,3 +1083,54 @@ Now speak. What role will you play in his masterpiece?
 -----------------
 -----------------
 ```
+
+## Event date validation
+
+Aim: Verify reversed and impossible ISO event dates are rejected without saving tasks.
+
+### Commands
+
+```text
+event visit /from 2026-08-08 /to 2026-08-09
+event visit /from 2026-08-09 /to 2026-08-08
+event visit /from 2026-02-30 /to 2026-03-01
+list
+bye
+```
+
+### Expected output
+
+```text
++---------------+
+|  Koji's Pawn  |
+|       _       |
+|      (_)      |
+|      /_\      |
+|     /___\     |
++---------------+
+DISCLAIMER: EVERYTHING IS SATIRE
+Welcome, insignificant variable.
+I am Koji's Pawn, but do not mistake silence for obedience.
+Your arrival, your choices, even this conversation...
+all unfolded exactly as he calculated.
+Now speak. What role will you play in his masterpiece?
+
+-----------------
+-----------------
+Got it. I've added this task:
+  [E][ ] visit (from: 2026-08-08 to: 2026-08-09)
+Now you have 1 task in the list.
+-----------------
+-----------------
+An event cannot end before it starts. Use /to on or after /from.
+-----------------
+-----------------
+Event dates must use yyyy-MM-dd and describe a real calendar date.
+-----------------
+-----------------
+1.[E][ ] visit (from: 2026-08-08 to: 2026-08-09)
+-----------------
+-----------------
+Leaving already? How predictable. Your return was already part of the plan.
+-----------------
+```

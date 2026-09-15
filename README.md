@@ -1,6 +1,7 @@
 # Koji's Pawn project template
 
-This is a project template for a greenfield Java project. It's named after the Java mascot _Duke_. Given below are instructions on how to use it.
+This project began with a greenfield Java template named after the Java mascot _Duke_. The chatbot built from it
+is named Koji's Pawn. Given below are instructions on how to use it.
 
 ## Setting up in Intellij
 

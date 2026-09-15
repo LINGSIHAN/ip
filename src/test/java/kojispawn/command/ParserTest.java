@@ -145,6 +145,38 @@ public class ParserTest {
     }
 
     @Test
+    public void parse_eventEndBeforeStart_rejectsReversedIsoDates() {
+        String[] commands = {
+            "event visit /from 2026-08-09 /to 2026-08-08",
+            "event visit /from 2026-08-09 2pm /to 2026-08-08 4pm"
+        };
+        for (String command : commands) {
+            KojisPawnException exception = assertThrows(KojisPawnException.class, () -> parser.parse(command));
+            assertEquals("An event cannot end before it starts. Use /to on or after /from.",
+                    exception.getMessage());
+        }
+    }
+
+    @Test
+    public void parse_eventImpossibleIsoDate_rejectsInvalidCalendarDate() {
+        KojisPawnException exception = assertThrows(KojisPawnException.class, () ->
+                parser.parse("event visit /from 2026-02-30 /to 2026-03-01"));
+
+        assertEquals("Event dates must use yyyy-MM-dd and describe a real calendar date.",
+                exception.getMessage());
+    }
+
+    @Test
+    public void parse_eventDatesInOrder_acceptsLaterOrSameEndDate() throws KojisPawnException {
+        Command laterDate = parser.parse("event visit /from 2026-08-08 /to 2026-08-09");
+        Command sameDate = parser.parse("event visit /from 2026-08-08 2pm /to 2026-08-08 4pm");
+
+        assertEquals("[E][ ] visit (from: 2026-08-08 to: 2026-08-09)", laterDate.getTask().toString());
+        assertEquals("[E][ ] visit (from: 2026-08-08 2pm to: 2026-08-08 4pm)",
+                sameDate.getTask().toString());
+    }
+
+    @Test
     public void parse_validMark_returnsOneBasedTaskNumber() throws KojisPawnException {
         Command command = parser.parse("mark 3");
 
