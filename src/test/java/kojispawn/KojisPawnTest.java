@@ -21,6 +21,80 @@ public class KojisPawnTest {
     private Path tempDirectory;
 
     @Test
+    public void getResponse_failedAdd_preservesTasksAndUndo() throws Exception {
+        assertFailedChangePreservesState("todo third task", false);
+    }
+
+    @Test
+    public void getResponse_failedMark_preservesTasksAndUndo() throws Exception {
+        assertFailedChangePreservesState("mark 1", false);
+    }
+
+    @Test
+    public void getResponse_failedUnmark_preservesTasksAndUndo() throws Exception {
+        assertFailedChangePreservesState("unmark 1", true);
+    }
+
+    @Test
+    public void getResponse_failedDelete_preservesTasksAndUndo() throws Exception {
+        assertFailedChangePreservesState("delete 1", false);
+    }
+
+    @Test
+    public void getResponse_failedUndo_preservesStateAndAllowsRetry() throws Exception {
+        Path dataFile = tempDirectory.resolve("kojispawn.txt");
+        KojisPawn koji = new KojisPawn(dataFile);
+        koji.getResponse("todo first task");
+        koji.getResponse("todo second task");
+        Path backup = tempDirectory.resolve("saved.txt");
+        Files.move(dataFile, backup);
+        Files.createDirectory(dataFile);
+
+        assertEquals("I could not save the task list to " + dataFile + ".", koji.getResponse("undo"));
+        assertEquals(CommandType.UNKNOWN, koji.getLastCommandType());
+        assertEquals("1.[T][ ] first task\n2.[T][ ] second task", koji.getResponse("list"));
+
+        Files.delete(dataFile);
+        Files.move(backup, dataFile);
+        assertEquals("The previous task change has been undone.", koji.getResponse("undo"));
+        assertEquals("1.[T][ ] first task", koji.getResponse("list"));
+        assertEquals(List.of("T | 0 | first task"), Files.readAllLines(dataFile));
+        assertEquals("There is no task change to undo.", koji.getResponse("undo"));
+    }
+
+    /**
+     * Uses a directory at the save path to simulate a write failure on every operating system.
+     */
+    private void assertFailedChangePreservesState(String command, boolean isInitiallyMarked)
+            throws Exception {
+        Path dataFile = tempDirectory.resolve("kojispawn.txt");
+        KojisPawn koji = new KojisPawn(dataFile);
+        koji.getResponse("todo first task");
+        koji.getResponse("todo second task");
+        if (isInitiallyMarked) {
+            koji.getResponse("mark 1");
+        }
+        String originalList = koji.getResponse("list");
+        List<String> originalData = Files.readAllLines(dataFile);
+        Path backup = tempDirectory.resolve("saved.txt");
+        Files.move(dataFile, backup);
+        Files.createDirectory(dataFile);
+
+        assertEquals("I could not save the task list to " + dataFile + ".", koji.getResponse(command));
+        assertEquals(CommandType.UNKNOWN, koji.getLastCommandType());
+        assertEquals(originalList, koji.getResponse("list"));
+        assertEquals(originalData, Files.readAllLines(backup));
+
+        Files.delete(dataFile);
+        Files.move(backup, dataFile);
+        assertEquals("The previous task change has been undone.", koji.getResponse("undo"));
+        String expectedList = isInitiallyMarked
+                ? "1.[T][ ] first task\n2.[T][ ] second task" : "1.[T][ ] first task";
+        assertEquals(expectedList, koji.getResponse("list"));
+        assertEquals(expectedList, new KojisPawn(dataFile).getResponse("list"));
+    }
+
+    @Test
     public void getResponse_taskLifecycle_returnsResponsesAndPersistsChanges() throws Exception {
         Path dataFile = tempDirectory.resolve("data/kojispawn.txt");
         KojisPawn koji = new KojisPawn(dataFile);

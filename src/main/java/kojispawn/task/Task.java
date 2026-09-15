@@ -42,6 +42,12 @@ public abstract class Task {
         isDone = false;
     }
 
+    /**
+     * Returns an independently mutable copy with the same type, data, and completion status.
+     * Undo snapshots must not share mutable task state with the live list.
+     *
+     * @return Independent copy of this task.
+     */
     abstract Task copy();
 
     protected void copyCompletionStatusTo(Task copy) {

@@ -102,7 +102,7 @@ public class KojisPawn {
      *
      * @param command Command returned by the parser.
      * @return Response describing the result.
-     * @throws KojisPawnException If a task number is outside the list.
+     * @throws KojisPawnException If a task number is invalid, undo is unavailable, or saving fails.
      */
     private String execute(Command command) throws KojisPawnException {
         assert command != null : "Command to execute must not be null";
@@ -131,10 +131,9 @@ public class KojisPawn {
     private String addTask(Task task) throws KojisPawnException {
         assert task != null : "Task creation commands must contain a task";
 
-        TaskList previousTasks = tasks.copy();
-        tasks.add(task);
-        storage.save(tasks);
-        undoSnapshot = previousTasks;
+        TaskList updatedTasks = tasks.copy();
+        updatedTasks.add(task);
+        saveTaskChange(updatedTasks);
         return ui.formatTaskAdded(task, tasks.size());
     }
 
@@ -149,10 +148,9 @@ public class KojisPawn {
         assert taskNumber != null && taskNumber > 0
                 : "Mark commands must contain a positive task number";
 
-        TaskList previousTasks = tasks.copy();
-        Task markedTask = tasks.mark(taskNumber);
-        storage.save(tasks);
-        undoSnapshot = previousTasks;
+        TaskList updatedTasks = tasks.copy();
+        Task markedTask = updatedTasks.mark(taskNumber);
+        saveTaskChange(updatedTasks);
         return ui.formatTaskMarked(markedTask);
     }
 
@@ -167,10 +165,9 @@ public class KojisPawn {
         assert taskNumber != null && taskNumber > 0
                 : "Unmark commands must contain a positive task number";
 
-        TaskList previousTasks = tasks.copy();
-        Task unmarkedTask = tasks.unmark(taskNumber);
-        storage.save(tasks);
-        undoSnapshot = previousTasks;
+        TaskList updatedTasks = tasks.copy();
+        Task unmarkedTask = updatedTasks.unmark(taskNumber);
+        saveTaskChange(updatedTasks);
         return ui.formatTaskUnmarked(unmarkedTask);
     }
 
@@ -185,10 +182,9 @@ public class KojisPawn {
         assert taskNumber != null && taskNumber > 0
                 : "Delete commands must contain a positive task number";
 
-        TaskList previousTasks = tasks.copy();
-        Task deletedTask = tasks.delete(taskNumber);
-        storage.save(tasks);
-        undoSnapshot = previousTasks;
+        TaskList updatedTasks = tasks.copy();
+        Task deletedTask = updatedTasks.delete(taskNumber);
+        saveTaskChange(updatedTasks);
         return ui.formatTaskDeleted(deletedTask, tasks.size());
     }
 
@@ -203,10 +199,20 @@ public class KojisPawn {
             throw new KojisPawnException("There is no task change to undo.");
         }
 
+        storage.save(undoSnapshot);
         tasks.replaceWith(undoSnapshot);
-        storage.save(tasks);
         undoSnapshot = null;
         return ui.formatUndo();
+    }
+
+    /**
+     * Saves a candidate state before changing the live tasks or undo history.
+     * A failed save leaves both in-memory states available for a retry.
+     */
+    private void saveTaskChange(TaskList updatedTasks) throws KojisPawnException {
+        storage.save(updatedTasks);
+        undoSnapshot = tasks.copy();
+        tasks.replaceWith(updatedTasks);
     }
 
     /**
