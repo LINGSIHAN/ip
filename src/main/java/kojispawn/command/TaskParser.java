@@ -63,6 +63,7 @@ final class TaskParser {
             throw new KojisPawnException(
                     "A deadline without a description is merely noise. Use: deadline DESCRIPTION /by DATE.");
         }
+        rejectRepeatedMarker(deadlineDetails, byMarker, byIndex, "Specify /by only once.");
 
         String dateBy = parseRequiredValue(deadlineDetails.substring(byIndex + byMarker.length()),
                 "The plan requires a deadline value after /by.",
@@ -89,6 +90,8 @@ final class TaskParser {
         String toMarker = " /to";
         int fromIndex = findRequiredMarker(eventDetails, fromMarker, MISSING_EVENT_START);
         int toIndex = findRequiredMarker(eventDetails, toMarker, MISSING_EVENT_END);
+        rejectRepeatedMarker(eventDetails, fromMarker, fromIndex, "Specify /from only once.");
+        rejectRepeatedMarker(eventDetails, toMarker, toIndex, "Specify /to only once.");
         if (toIndex < fromIndex) {
             throw new KojisPawnException("Causality matters. Place /from START before /to END.");
         }
@@ -116,6 +119,21 @@ final class TaskParser {
             throw new KojisPawnException(errorMessage);
         }
         return index;
+    }
+
+    /**
+     * Rejects another complete marker while allowing similar text such as {@code /fromage} in a value.
+     */
+    private void rejectRepeatedMarker(String details, String marker, int firstIndex, String errorMessage)
+            throws KojisPawnException {
+        int nextIndex = details.indexOf(marker, firstIndex + marker.length());
+        while (nextIndex != -1) {
+            int markerEnd = nextIndex + marker.length();
+            if (markerEnd == details.length() || Character.isWhitespace(details.charAt(markerEnd))) {
+                throw new KojisPawnException(errorMessage);
+            }
+            nextIndex = details.indexOf(marker, markerEnd);
+        }
     }
 
     /**

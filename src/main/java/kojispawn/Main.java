@@ -3,8 +3,10 @@ package kojispawn;
 import java.io.IOException;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
@@ -15,21 +17,22 @@ import kojispawn.ui.MainWindow;
  * Displays the JavaFX interface for Koji's Pawn.
  */
 public class Main extends Application {
-    private final KojisPawn koji;
-
-    /**
-     * Creates the JavaFX application and its Koji's Pawn response generator.
-     */
-    public Main() {
-        try {
-            koji = new KojisPawn();
-        } catch (KojisPawnException exception) {
-            throw new IllegalStateException("Unable to initialize Koji's Pawn.", exception);
-        }
-    }
+    private KojisPawn koji;
 
     @Override
     public void start(Stage stage) throws IOException {
+        try {
+            koji = new KojisPawn();
+        } catch (KojisPawnException exception) {
+            Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+            errorAlert.setTitle("Koji's Pawn");
+            errorAlert.setHeaderText("Unable to load task data");
+            errorAlert.setContentText(exception.getMessage());
+            errorAlert.showAndWait();
+            Platform.exit();
+            return;
+        }
+
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
         AnchorPane mainLayout = fxmlLoader.load();
         Scene scene = new Scene(mainLayout);

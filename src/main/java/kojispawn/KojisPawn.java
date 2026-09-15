@@ -51,11 +51,11 @@ public class KojisPawn {
     }
 
     /**
-     * Runs the chatbot until the user enters the {@code bye} command.
+     * Runs the chatbot until the user enters {@code bye} or the input stream ends.
      */
     public void run() {
         ui.showGreeting();
-        while (!isExitRequested) {
+        while (!isExitRequested && ui.hasNextCommand()) {
             ui.showResponse(getResponse(ui.readCommand()));
         }
 
