@@ -1,27 +1,23 @@
 # Koji's Pawn User Guide
 
-Koji's Pawn is a task-management chatbot with a JavaFX chat window and a console interface. It manages todos,
+Koji's Pawn is a task-management chatbot with a JavaFX chat window. It manages todos,
 deadlines, and events, saves task changes between sessions, and lets you search tasks or undo your most recent change.
 
 ![Koji's Pawn JavaFX chat showing tasks and undo](Ui.png)
 
 ## Getting started
 
-Use JDK 25. If you have `kojispawn.jar`, open a terminal in the folder containing the JAR and run:
+1. Install Java 25.
+2. Download `kojispawn.jar` from the [latest Koji's Pawn release](https://github.com/LINGSIHAN/ip/releases).
+3. Create a new folder for Koji's Pawn and put the JAR in it.
+4. Open a terminal in that folder (your IDE's terminal works too) and run:
 
-```text
-java -jar kojispawn.jar
-```
+   ```text
+   java -jar kojispawn.jar
+   ```
 
-To run from the source code instead, open the project directory and run `Launcher.main()` in your IDE or use Gradle:
-
-```powershell
-.\gradlew.bat run
-```
-
-On macOS or Linux, use `./gradlew run`. To use the console instead, run `KojisPawn.main()` in your IDE.
 In the chat window, type a command and press Enter or select **SEND**. The conversation scrolls to the latest message.
-Both interfaces understand the same commands and save tasks in `data/kojispawn.txt` under the folder you run them from.
+Koji's Pawn saves tasks in `data/kojispawn.txt` inside the folder where you run the JAR.
 
 ## Command reference
 
@@ -133,8 +129,7 @@ The search is case-sensitive and checks only task descriptions.
 bye
 ```
 
-The console also exits cleanly when its input stream ends. In the JavaFX chat, `bye` displays Koji's farewell
-briefly before closing the window.
+In the chat window, `bye` displays Koji's farewell briefly before closing.
 
 ## Task symbols
 
