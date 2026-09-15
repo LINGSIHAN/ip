@@ -2,6 +2,7 @@ package kojispawn.command;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
+import java.util.regex.Pattern;
 
 import kojispawn.exception.KojisPawnException;
 import kojispawn.task.Deadline;
@@ -19,6 +20,7 @@ final class TaskParser {
     private static final String MISSING_EVENT_START = "Every event has an origin. Include /from START.";
     private static final String MISSING_EVENT_END =
             "Even calculated events need an endpoint. Include /to END.";
+    private static final Pattern ISO_DATE_PREFIX = Pattern.compile("^\\d{4}-\\d{2}-\\d{2}(?:$|\\s)");
     /**
      * Creates a todo from a todo command.
      *
@@ -101,7 +103,33 @@ final class TaskParser {
                 "The plan requires a starting value after /from.", MISSING_EVENT_START);
         String dateTo = parseRequiredValue(eventDetails.substring(toIndex + toMarker.length()),
                 "The plan requires an ending value after /to.", MISSING_EVENT_END);
+        validateEventDateOrder(dateFrom, dateTo);
         return new Event(description, dateFrom, dateTo);
+    }
+
+    /**
+     * Compares calendar dates when both event values begin with ISO dates.
+     */
+    private void validateEventDateOrder(String dateFrom, String dateTo) throws KojisPawnException {
+        LocalDate startDate = parseEventDatePrefix(dateFrom);
+        LocalDate endDate = parseEventDatePrefix(dateTo);
+        if (startDate != null && endDate != null && endDate.isBefore(startDate)) {
+            throw new KojisPawnException("An event cannot end before it starts. Use /to on or after /from.");
+        }
+    }
+
+    /**
+     * Returns a leading ISO date, or {@code null} for a free-form event value.
+     */
+    private LocalDate parseEventDatePrefix(String value) throws KojisPawnException {
+        if (!ISO_DATE_PREFIX.matcher(value).find()) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(value.substring(0, 10));
+        } catch (DateTimeParseException exception) {
+            throw new KojisPawnException("Event dates must use yyyy-MM-dd and describe a real calendar date.");
+        }
     }
 
     private String parseEventDetails(String command) throws KojisPawnException {
