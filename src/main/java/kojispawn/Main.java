@@ -37,7 +37,7 @@ public class Main extends Application {
         Scene scene = new Scene(mainLayout);
 
         stage.setTitle("Koji's Pawn");
-        stage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/DaDuke.png")));
+        stage.getIcons().add(new Image(Main.class.getResourceAsStream("/images/PawnIcon.png")));
         stage.setMinHeight(220.0);
         stage.setMinWidth(417.0);
         stage.setScene(scene);

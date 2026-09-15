@@ -17,8 +17,8 @@ import kojispawn.command.CommandType;
  * Controls the main Koji's Pawn chat window defined in FXML.
  */
 public class MainWindow extends AnchorPane {
-    private final Image userImage = new Image(getClass().getResourceAsStream("/images/DaUser.png"));
-    private final Image kojiImage = new Image(getClass().getResourceAsStream("/images/DaDuke.png"));
+    private final Image userImage = new Image(getClass().getResourceAsStream("/images/StickmanIcon.png"));
+    private final Image kojiImage = new Image(getClass().getResourceAsStream("/images/MaskIcon.png"));
 
     @FXML
     private ScrollPane scrollPane;
