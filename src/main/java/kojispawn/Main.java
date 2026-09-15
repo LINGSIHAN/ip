@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import kojispawn.exception.KojisPawnException;
 import kojispawn.ui.MainWindow;
@@ -30,6 +31,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        Font.loadFont(Main.class.getResourceAsStream("/fonts/Cinzel.ttf"), 20.0);
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("/view/MainWindow.fxml"));
         AnchorPane mainLayout = fxmlLoader.load();
         Scene scene = new Scene(mainLayout);
