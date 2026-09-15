@@ -64,9 +64,16 @@ public class MainWindow extends AnchorPane {
         userInput.clear();
 
         if (koji.isExitRequested()) {
-            PauseTransition exitDelay = new PauseTransition(Duration.seconds(1.0));
-            exitDelay.setOnFinished(event -> Platform.exit());
-            exitDelay.play();
+            scheduleExit();
         }
+    }
+
+    /**
+     * Leaves the farewell visible for one second before closing the application.
+     */
+    private void scheduleExit() {
+        PauseTransition exitDelay = new PauseTransition(Duration.seconds(1.0));
+        exitDelay.setOnFinished(event -> Platform.exit());
+        exitDelay.play();
     }
 }
