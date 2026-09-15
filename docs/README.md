@@ -7,8 +7,13 @@ deadlines, and events, saves task changes between sessions, and lets you search 
 
 ## Getting started
 
-Use JDK 25 and run commands from the project directory so the task file is saved in the expected location.
-To open the JavaFX chat window, run `Launcher.main()` in your IDE or use Gradle:
+Use JDK 25. If you have `kojispawn.jar`, open a terminal in the folder containing the JAR and run:
+
+```text
+java -jar kojispawn.jar
+```
+
+To run from the source code instead, open the project directory and run `Launcher.main()` in your IDE or use Gradle:
 
 ```powershell
 .\gradlew.bat run
@@ -16,7 +21,7 @@ To open the JavaFX chat window, run `Launcher.main()` in your IDE or use Gradle:
 
 On macOS or Linux, use `./gradlew run`. To use the console instead, run `KojisPawn.main()` in your IDE.
 In the chat window, type a command and press Enter or select **SEND**. The conversation scrolls to the latest message.
-Both interfaces understand the same commands and use the same task file.
+Both interfaces understand the same commands and save tasks in `data/kojispawn.txt` under the folder you run them from.
 
 ## Command reference
 
@@ -87,7 +92,8 @@ list
 
 ### Marking, unmarking, deleting, and undoing tasks
 
-Use the number displayed by `list`. Task numbering starts at `1`.
+Use the number displayed by `list`. Task numbering starts at `1`. If you entered the todo and deadline examples above,
+task `2` is the deadline. Check its current number with `list` before changing it because numbers shift after deletion.
 
 ```text
 mark 2
@@ -156,14 +162,3 @@ data/kojispawn.txt
 ```
 
 You do not need to edit this file manually. If it does not exist, Koji's Pawn starts with an empty list.
-
-## Input and storage errors
-
-Koji's Pawn explains missing command values, invalid task numbers, impossible dates, repeated `/by`, `/from`, or
-`/to` markers, and other invalid commands without adding a task. Task text cannot contain the reserved separator
-` | ` or a line break because those would damage the saved-data format. Leading, trailing, and repeated spaces
-between ordinary command parts are accepted.
-
-If saving fails, Koji's Pawn reports the error and keeps the current task list and undo history so you can retry.
-If saved data cannot be loaded, the JavaFX interface displays the storage error in an alert. Malformed saved records
-report their file and line number; the data file is left in place for you to inspect or repair.
