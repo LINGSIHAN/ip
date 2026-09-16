@@ -8,6 +8,9 @@ deadlines, and events, saves task changes between sessions, and lets you search 
 ## Getting started
 
 1. Install Java 25.
+   - On an Apple Silicon Mac (M1 or newer), install Azul Zulu
+     `25.0.3.fx-zulu`, which includes JavaFX.
+   - Verify the installation with `java -version`.
 2. Download `kojispawn.jar` from the [latest Koji's Pawn release](https://github.com/LINGSIHAN/ip/releases).
 3. Create a new folder for Koji's Pawn and put the JAR in it.
 4. Open a terminal in that folder (your IDE's terminal works too) and run:
