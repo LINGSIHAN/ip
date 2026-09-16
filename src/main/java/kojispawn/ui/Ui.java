@@ -11,6 +11,22 @@ import kojispawn.task.Task;
  */
 public class Ui {
     private static final String LINE = "-----------------\n";
+    // Retained as a design asset even though startup now displays only the greeting.
+    private static final String BANNER =
+            "+---------------+\n"
+                    + "|  Koji's Pawn  |\n"
+                    + "|       _       |\n"
+                    + "|      (_)      |\n"
+                    + "|      /_\\      |\n"
+                    + "|     /___\\     |\n"
+                    + "+---------------+\n";
+    private static final String GREETING =
+            "DISCLAIMER: EVERYTHING IS SATIRE\n"
+                    + "Welcome, insignificant variable.\n"
+                    + "I am Koji's Pawn, but do not mistake silence for obedience.\n"
+                    + "Your arrival, your choices, even this conversation...\n"
+                    + "all unfolded exactly as he calculated.\n"
+                    + "Now speak. What role will you play in his masterpiece?";
     private final Scanner scanner = new Scanner(System.in);
 
     /**
@@ -32,29 +48,21 @@ public class Ui {
     }
 
     /**
-     * Shows the application banner and greeting.
+     * Shows the application greeting.
      */
     public void showGreeting() {
-        String banner =
-                "+---------------+\n"
-                        + "|  Koji's Pawn  |\n"
-                        + "|       _       |\n"
-                        + "|      (_)      |\n"
-                        + "|      /_\\      |\n"
-                        + "|     /___\\     |\n"
-                        + "+---------------+\n"
-                        + "DISCLAIMER: EVERYTHING IS SATIRE\n";
+        System.out.println(GREETING);
+        System.out.println();
+        System.out.print(LINE);
+    }
 
-        String greeting =
-                "Welcome, insignificant variable.\n"
-                        + "I am Koji's Pawn, but do not mistake silence for obedience.\n"
-                        + "Your arrival, your choices, even this conversation...\n"
-                        + "all unfolded exactly as he calculated.\n"
-                        + "Now speak. What role will you play in his masterpiece?\n"
-                        + "\n"
-                        + LINE;
-        System.out.print(banner);
-        System.out.print(greeting);
+    /**
+     * Returns the application greeting.
+     *
+     * @return Greeting shown when the application starts.
+     */
+    public String getGreeting() {
+        return GREETING;
     }
 
     /**

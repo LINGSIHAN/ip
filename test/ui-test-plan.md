@@ -24,13 +24,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -68,13 +61,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -131,13 +117,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -180,13 +159,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -249,13 +221,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -296,13 +261,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -349,13 +307,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -420,13 +371,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -496,13 +440,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -580,13 +517,6 @@ Aim: Verify leading and repeated structural spaces do not change stored task tex
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -645,13 +575,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -720,13 +643,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -807,13 +723,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -879,13 +788,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -964,13 +866,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -1021,13 +916,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -1065,13 +953,6 @@ list
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.
@@ -1101,13 +982,6 @@ bye
 ### Expected output
 
 ```text
-+---------------+
-|  Koji's Pawn  |
-|       _       |
-|      (_)      |
-|      /_\      |
-|     /___\     |
-+---------------+
 DISCLAIMER: EVERYTHING IS SATIRE
 Welcome, insignificant variable.
 I am Koji's Pawn, but do not mistake silence for obedience.

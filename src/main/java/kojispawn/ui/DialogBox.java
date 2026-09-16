@@ -56,6 +56,19 @@ public class DialogBox extends HBox {
     }
 
     /**
+     * Creates a left-aligned dialog box without command-specific styling.
+     *
+     * @param message Koji's Pawn message.
+     * @param image Image representing Koji's Pawn.
+     * @return Dialog box for the Koji's Pawn message.
+     */
+    public static DialogBox getKojiDialog(String message, Image image) {
+        DialogBox dialogBox = new DialogBox(message, image);
+        dialogBox.flip();
+        return dialogBox;
+    }
+
+    /**
      * Creates a left-aligned dialog box for a Koji's Pawn response.
      *
      * @param message Koji's Pawn response.
@@ -64,8 +77,7 @@ public class DialogBox extends HBox {
      * @return Dialog box for the Koji's Pawn response.
      */
     public static DialogBox getKojiDialog(String message, Image image, CommandType commandType) {
-        DialogBox dialogBox = new DialogBox(message, image);
-        dialogBox.flip();
+        DialogBox dialogBox = getKojiDialog(message, image);
         dialogBox.changeDialogStyle(commandType);
         return dialogBox;
     }

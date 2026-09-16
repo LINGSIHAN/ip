@@ -46,6 +46,7 @@ public class MainWindow extends AnchorPane {
      */
     public void setKoji(KojisPawn koji) {
         this.koji = koji;
+        dialogContainer.getChildren().add(DialogBox.getKojiDialog(koji.getGreeting(), kojiImage));
     }
 
     /**

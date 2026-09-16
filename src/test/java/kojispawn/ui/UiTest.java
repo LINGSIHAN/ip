@@ -15,6 +15,19 @@ import kojispawn.task.Todo;
  */
 public class UiTest {
     @Test
+    public void getGreeting_applicationStartup_returnsGreetingAndDisclaimerWithoutBanner() {
+        Ui ui = new Ui();
+
+        assertEquals("DISCLAIMER: EVERYTHING IS SATIRE\n"
+                + "Welcome, insignificant variable.\n"
+                + "I am Koji's Pawn, but do not mistake silence for obedience.\n"
+                + "Your arrival, your choices, even this conversation...\n"
+                + "all unfolded exactly as he calculated.\n"
+                + "Now speak. What role will you play in his masterpiece?",
+                ui.getGreeting());
+    }
+
+    @Test
     public void formatTasksOnDate_emptyAndMultipleMatches_formatsHeadingAndNumbers() {
         Ui ui = new Ui();
         LocalDate date = LocalDate.of(2019, 12, 2);

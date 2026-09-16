@@ -89,6 +89,15 @@ public class KojisPawn {
     }
 
     /**
+     * Returns the greeting shown when Koji's Pawn starts.
+     *
+     * @return Application greeting.
+     */
+    public String getGreeting() {
+        return ui.getGreeting();
+    }
+
+    /**
      * Returns whether the user has entered the {@code bye} command.
      *
      * @return {@code true} when the application should exit.
