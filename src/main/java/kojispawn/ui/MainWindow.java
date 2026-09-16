@@ -50,13 +50,17 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Adds the user's message and Koji's response, then clears the text field.
+     * Ignores blank input, or adds the user's message and Koji's response before clearing the text field.
      */
     @FXML
     private void handleUserInput() {
         assert koji != null : "Koji must be initialized before handling user input";
 
         String userText = userInput.getText();
+        if (isBlankInput(userText)) {
+            return;
+        }
+
         String kojiText = koji.getResponse(userText);
         CommandType commandType = koji.getLastCommandType();
         dialogContainer.getChildren().addAll(
@@ -67,6 +71,10 @@ public class MainWindow extends AnchorPane {
         if (koji.isExitRequested()) {
             scheduleExit();
         }
+    }
+
+    static boolean isBlankInput(String input) {
+        return input.isBlank();
     }
 
     /**
